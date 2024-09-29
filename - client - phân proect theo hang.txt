@@ -1,0 +1,6 @@
+- client -> phân proect theo hãng
+- Sản phẩm quần áo nữ, nam
+- them giỏ hang ( phải đăng nhập )
+- hãng nào được mua nhiều nhất
+- thay username -> email
+- quên mật khẩu ( thì gửi về email ) 

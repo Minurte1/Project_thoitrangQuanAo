@@ -1,0 +1,10 @@
+services:
+  db-mysql:
+    image: mysql:latest
+    container_name: TMDTQuanAo
+    restart: always
+    environment:
+      - MYSQL_DATABASE=TMDTQuanAo
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "3307:3306"
