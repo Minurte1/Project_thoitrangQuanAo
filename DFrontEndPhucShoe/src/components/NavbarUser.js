@@ -36,7 +36,7 @@ const NavBarUser = () => {
         <div className="isOpen">
           {/* <img src={LogoNavbar} alt="Logo" className='image-navbar' /> */}
           <a className="image-navbar" href="/">
-            PhucShoe
+            Quần Áo
           </a>
           <div className="ml-auto">
             <a href="/" className="nav-item nav-item1">

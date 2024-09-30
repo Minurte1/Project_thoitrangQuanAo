@@ -344,7 +344,7 @@ const MuaHang = () => {
       <div className="div-logomuahang">
         {" "}
         <a href="/" id="logophucshoe">
-          PhucShoe
+          Quần Áo
         </a>
       </div>
 

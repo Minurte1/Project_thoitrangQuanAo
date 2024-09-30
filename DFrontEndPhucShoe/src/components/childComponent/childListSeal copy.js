@@ -84,49 +84,9 @@ export const ShoeListSealNam = ({ shoes }) => {
   return (
     <div className="shoe-list shoe-listindex">
       <h2 className="tieude" id="tieude_tatcasp">
-        Sản Phẩm Giày Dành Cho Nam
+        Sản Phẩm Quần Áo Dành Cho Nam
       </h2>
-      {/* <div>
-                <input
-                    className="input-timSP"
-                    type="text"
-                    placeholder="Tìm kiếm sản phẩm..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button
-                    className={`button-sort ${sortOrder === 'asc' ? 'asc' : 'desc'}`}
-                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                >
-                    Sắp xếp theo giá {sortOrder === 'asc' ? 'tăng dần' : 'giảm dần'}
-                </button>
-            </div>
-            <div className="dropdown-container">
-                <label className="label-brand" htmlFor="brandFilter">Chọn hãng:</label>
-                <select
-                    id="brandFilter"
-                    value={selectedBrand}
-                    onChange={(e) => setSelectedBrand(e.target.value)}
-                    className="select-brand"
-                >
-                    {uniqueBrands.map((brand, index) => (
-                        <option key={index} value={brand}>{brand}</option>
-                    ))}
-                </select>
-            </div> */}
-      {/* <div className="dropdown-container">
-                <label className="label-price" htmlFor="priceFilter">Chọn giá:</label>
-                <select
-                    id="priceFilter"
-                    value={selectedPriceRange}
-                    onChange={(e) => setSelectedPriceRange(e.target.value)}
-                    className="select-price"
-                >
-                    {['Tất cả', 'Dưới 200k', 'Dưới 300k', 'Dưới 400k', 'Dưới 500k'].map((price, index) => (
-                        <option key={index} value={price}>{price}</option>
-                    ))}
-                </select>
-            </div> */}
+
       <hr className="hrne"></hr>
       <ul>
         {limitedShoes.map((shoe) => (

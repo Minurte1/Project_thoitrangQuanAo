@@ -1,12 +1,10 @@
-const { name } = require("ejs");
-const connection = require("../config/old.js");
 const {
   createHANG,
   updateHANG,
   getHANG,
   deleteHANG,
 } = require("../services/apiHANGServices");
-const multer = require("multer");
+
 const {
   createKICHCO,
   updateKICHCO,

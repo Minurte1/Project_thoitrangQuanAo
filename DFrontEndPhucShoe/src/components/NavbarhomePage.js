@@ -80,7 +80,7 @@ const MyNavbar = () => {
         <div color="light" light expand="md" className="nav">
           <div className="isOpen">
             <a className="image-navbar" href="/">
-              PhucShoe
+              QuanAo
             </a>
             <div className="ml-autoo">
               <a href="/" className="nav-item nav-item1">
