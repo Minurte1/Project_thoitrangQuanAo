@@ -12,6 +12,7 @@ const {
   updatePasswordUser,
   buyProductpost,
   updateAdminPassword,
+  getDataUserServices,
 } = require("../services/apiCRUDServices");
 
 const CreateUser = async (req, res) => {
@@ -80,6 +81,20 @@ const getInfoUser = async (req, res) => {
   }
 };
 
+const getDataUser = async (req, res) => {
+  try {
+    const taikhoan = req.body.username;
+
+    const results = await getDataUserServices(taikhoan);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 const CapnhatUser = async (req, res) => {
   try {
     const taikhoan = req.params.username;
@@ -281,4 +296,5 @@ module.exports = {
   muahangUser,
   countUsers,
   CapnhatAdmin,
+  getDataUser,
 };

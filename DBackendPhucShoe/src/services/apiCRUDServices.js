@@ -14,7 +14,22 @@ const hashPassword = (userPassword) => {
 const checkPassword = (inputpassword, hashpass) => {
   return bcrypt.compareSync(inputpassword, hashpass);
 };
-
+const getDataUserServices = async (taikhoan) => {
+  try {
+    const [results1, fields1] = await connection.execute(
+      "SELECT * from khachhang taikhoan = ?",
+      [taikhoan]
+    );
+    return {
+      EM: "tìm thấy user !!!",
+      EC: 1,
+      DT: results1,
+    };
+  } catch (error) {
+    console.error("Error in postLoginUser:", error);
+    throw error;
+  }
+};
 const getUser = async () => {
   try {
     const [results, fields] = await connection.execute(
@@ -557,4 +572,5 @@ module.exports = {
   updateAdminPassword,
   updatePasswordUser,
   buyProductpost,
+  getDataUserServices,
 };

@@ -39,3 +39,8 @@
     transform: translateX(0);
     /* Đưa modal về vị trí bình thường */
 }
+
+.cart-item-gia {
+    font-size: 15px;
+
+}
