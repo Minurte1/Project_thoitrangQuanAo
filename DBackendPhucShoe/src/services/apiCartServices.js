@@ -119,7 +119,30 @@ const getDataCartUserServices = async (username) => {
     };
   }
 };
+
+const deleteCart = async (ma_gio_hang) => {
+  try {
+    const [result, fields] = await pool.execute(
+      "DELETE FROM gio_hang WHERE ma_gio_hang = ?",
+      [ma_gio_hang]
+    );
+
+    return {
+      EM: "Loại bỏ sản phẩm thành công",
+      EC: 1,
+      DT: [],
+    };
+  } catch (error) {
+    console.error("Error processing cart update:", error);
+    return {
+      EM: "Có lỗi xảy ra trong quá trình xử lý giỏ hàng",
+      EC: -1,
+      DT: error,
+    };
+  }
+};
 module.exports = {
   cartUserServices,
   getDataCartUserServices,
+  deleteCart,
 };

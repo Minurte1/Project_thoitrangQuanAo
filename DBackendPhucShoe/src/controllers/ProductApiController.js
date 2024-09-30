@@ -386,6 +386,7 @@ const Capnhatsanpham = async (req, res) => {
 const Xoasanpham = async (req, res) => {
   try {
     const masanpham = req.params.masanpham;
+
     const results = await Deletesanpham(masanpham);
     return res.status(200).json({
       EM: results.EM,

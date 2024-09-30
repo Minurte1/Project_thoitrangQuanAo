@@ -57,7 +57,11 @@ const {
   Capnhatsanpham,
   Xoasanpham,
 } = require("../controllers/ProductApiController");
-const { cartUser, getDataCartUser } = require("../controllers/cartController");
+const {
+  cartUser,
+  getDataCartUser,
+  deleteCartUser,
+} = require("../controllers/cartController");
 const { checkUserJWT } = require("../middleware/JWTaction"); //test 1 số route có chứa hàm này
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -88,7 +92,7 @@ const upload = multer({ storage: storage, fileFilter: imageFilter });
 // router.delete("/product", checkUserJWT, getAllProduct);
 
 //mua hàng dành cho user
-router.post("/productt", muahangUser);
+router.post("/productt", muahangUser); //mua hàng
 //----------------------------------------------------------------------------------------------------------------
 //user routes login and register
 router.get("/protected", checkUserJWT, (req, res) => {
@@ -179,4 +183,5 @@ router.post("/donhangdahuygiaokhachhang", getDonHangDahuyGiaochokhachhang);
 router.post("/cart", cartUser);
 router.post("/cart/data", getDataCartUser);
 router.post("/user/thongtin", getDataUser);
+router.post("/cart/delete", deleteCartUser);
 module.exports = router; // Di chuyển dòng này về cuối tệp của bạn

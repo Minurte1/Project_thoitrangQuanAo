@@ -16,8 +16,9 @@ const checkPassword = (inputpassword, hashpass) => {
 };
 const getDataUserServices = async (taikhoan) => {
   try {
+    console.log(taikhoan);
     const [results1, fields1] = await connection.execute(
-      "SELECT * from khachhang taikhoan = ?",
+      "SELECT * from khachhang where taikhoan = ?",
       [taikhoan]
     );
     return {
