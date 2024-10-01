@@ -1,11 +1,14 @@
 const pool = require("../config/old");
+
 const {
   cartUserServices,
   getDataCartUserServices,
   deleteCart,
   thanhToanCartServices,
   soLuongSPtrongGHServices,
+  changePassword,
 } = require("../services/apiCartServices");
+
 const cartUser = async (req, res) => {
   try {
     // console.log("cart", req.body);
@@ -123,10 +126,32 @@ const soLuongSPtrongGioHang = async (req, res) => {
     });
   }
 };
+const changeFogrgetPassword = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const { password } = req.body; // Mật khẩu mới từ client
+    let results = await changePassword(email, password);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(404).json({
+      EM: "lỗi controller getAllTaiKhoanController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
 module.exports = {
   cartUser,
   getDataCartUser,
   deleteCartUser,
   thanhToanCartUser,
   soLuongSPtrongGioHang,
+  changeFogrgetPassword,
 };

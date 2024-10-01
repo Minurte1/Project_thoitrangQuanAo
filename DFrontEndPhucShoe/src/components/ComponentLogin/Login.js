@@ -5,20 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-// import Slide1 from "./assets/image/slide1.jpg";
 const Login = () => {
-  //   const registerBtn = document.getElementById("register");
-  //   const container = document.getElementById("container");
-  //   const loginBtn = document.getElementById("login");
-  //   registerBtn.addEventListener("click", () => {
-  //     container.classList.add("active");
-  //   });
-  //   registerBtn.addEventListener("click", () => {
-  //     container.classList.add("active");
-  //   });
-  //   loginBtn.addEventListener("click", () => {
-  //     container.classList.remove("active");
-  //   });
   const navigate = useNavigate();
 
   const [UsernameLogin, setUsernameLogin] = useState("");
@@ -114,7 +101,9 @@ const Login = () => {
   const handleLoginClick = () => {
     setIsActive(false);
   };
-
+  const handleMoveForgetPassword = () => {
+    navigate("/forget-password");
+  };
   return (
     <>
       <div className="container-login">
@@ -215,7 +204,9 @@ const Login = () => {
                 />
                 <div className="labelline"> Password</div>
               </div>
-              <a className="tag">forget your password ?</a>
+              <a className="tag login-a" onClick={handleMoveForgetPassword}>
+                forget your password ?
+              </a>
               <button className="btn-accept" onClick={handleLogin}>
                 Đăng nhập
               </button>
@@ -225,10 +216,7 @@ const Login = () => {
             <div className="toggle">
               <div className="toggle-panel toggle-left">
                 <h1>HELLO, MY FRIEND !!</h1>
-                {/* <p>
-                  Register with your personal details to use all of site
-                  features
-                </p> */}
+
                 <p>
                   Có một tài khoản trong tay bạn dễ dàng tạo nên thuận tiện mua
                   hàng

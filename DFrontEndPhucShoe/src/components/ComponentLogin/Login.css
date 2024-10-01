@@ -25,6 +25,10 @@
   height: 100vh;
 }
 
+.login-a {
+  cursor: pointer;
+}
+
 .container1 {
   background-color: white;
   border-radius: 30px;

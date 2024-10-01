@@ -23,6 +23,7 @@ import NotFoundPage from "./dashbroand/src/pages/page-not-found.jsx";
 import ChatRealTime from "./views/ComponentChat/ChatRealTime.jsx";
 import axios from "axios";
 import "./ChatRealTime-Css.css";
+import ForgotPasswordComponent from "./components/ComponentLogin/ForgetPassword.js";
 const App = () => {
   const tokenSetStorage = sessionStorage.getItem("accessToken");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -184,6 +185,10 @@ const App = () => {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route
+            path="/forget-password"
+            element={<ForgotPasswordComponent />}
+          />
           <Route
             path="/profile/:username"
             element={

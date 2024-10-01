@@ -1,5 +1,15 @@
 const pool = require("../config/old");
 const { format } = require("date-fns");
+
+const saltRounds = 10;
+const bcrypt = require("bcrypt");
+const salt = bcrypt.genSaltSync(saltRounds);
+const hashPassword = (userPassword) => {
+  let hashPassword = bcrypt.hashSync(userPassword, salt);
+  //let check = bcrypt.compareSync(password, hashPassword);
+  return hashPassword;
+};
+
 const cartUserServices = async (username, product, quantity = 1) => {
   try {
     // Check if the user exists in the 'khachhang' table
@@ -276,10 +286,43 @@ const soLuongSPtrongGHServices = async (username) => {
     };
   }
 };
+const changePassword = async (email, password) => {
+  console.log(email, password);
+
+  try {
+    // Cập nhật mật khẩu trong bảng taikhoan
+    if (!email || !password) {
+      return {
+        EM: "Emaill và password không hợp lệ",
+        EC: 0,
+        DT: [],
+      };
+    }
+    const matkhauHashed = hashPassword(password);
+    const [result] = await pool.execute(
+      "UPDATE users SET matkhau = ? WHERE taikhoan = ?",
+      [matkhauHashed, email]
+    );
+
+    return {
+      EM: "Thay đổi mật khẩu thành công",
+      EC: 1,
+      DT: [],
+    };
+  } catch (error) {
+    console.error("Error processing cart update:", error);
+    return {
+      EM: "Có lỗi xảy ra trong quá trình cập nhật mật khẩu",
+      EC: -1,
+      DT: error,
+    };
+  }
+};
 module.exports = {
   cartUserServices,
   getDataCartUserServices,
   deleteCart,
   thanhToanCartServices,
   soLuongSPtrongGHServices,
+  changePassword,
 };

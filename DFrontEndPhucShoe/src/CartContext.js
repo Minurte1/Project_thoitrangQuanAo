@@ -10,7 +10,6 @@ export const CartProvider = ({ children }) => {
   const [soLuongSanPham, setSoLuongSanPham] = useState(0);
 
   const fetchSoLuongGioHang = async (username) => {
-    console.log("username", username);
     if (username) {
       try {
         const response = await CookieAxios.post(
@@ -29,7 +28,6 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (username) => {
     fetchSoLuongGioHang(username);
-    console.log("h");
   };
 
   return (
