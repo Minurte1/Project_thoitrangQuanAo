@@ -3,10 +3,12 @@ const {
   cartUserServices,
   getDataCartUserServices,
   deleteCart,
+  thanhToanCartServices,
+  soLuongSPtrongGHServices,
 } = require("../services/apiCartServices");
 const cartUser = async (req, res) => {
   try {
-    console.log("cart", req.body);
+    // console.log("cart", req.body);
     const username = req.body.username;
     const product = req.body.product;
     let results = await cartUserServices(username, product);
@@ -29,7 +31,7 @@ const cartUser = async (req, res) => {
 
 const getDataCartUser = async (req, res) => {
   try {
-    console.log("cart", req.body);
+    // console.log("cart", req.body);
     const username = req.body.username;
 
     let results = await getDataCartUserServices(username);
@@ -70,4 +72,61 @@ const deleteCartUser = async (req, res) => {
     });
   }
 };
-module.exports = { cartUser, getDataCartUser, deleteCartUser };
+const thanhToanCartUser = async (req, res) => {
+  // console.log(req.body);
+  const MAKHACHHANG = req.body.MAKHACHHANG;
+  const name = req.body.name;
+  const diachi = req.body.dataDiachi;
+  const phone = req.body.phone;
+  const dataCart = req.body.dataCart;
+  try {
+    let results = await thanhToanCartServices(
+      MAKHACHHANG,
+      name,
+      diachi,
+      phone,
+      dataCart
+    );
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(404).json({
+      EM: "lỗi controller getAllTaiKhoanController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+const soLuongSPtrongGioHang = async (req, res) => {
+  const username = req.body.username;
+  try {
+    let results = await soLuongSPtrongGHServices(username);
+
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(404).json({
+      EM: "lỗi controller getAllTaiKhoanController",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+module.exports = {
+  cartUser,
+  getDataCartUser,
+  deleteCartUser,
+  thanhToanCartUser,
+  soLuongSPtrongGioHang,
+};

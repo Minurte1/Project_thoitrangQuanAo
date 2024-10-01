@@ -26,67 +26,82 @@ const Login = () => {
   const [UsernameRegister, setUsernameRegister] = useState("");
   const [PasswordRegister, setPasswordRegister] = useState("");
   const [RePasswordRegister, setRePasswordRegister] = useState("");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleRegister = async (event) => {
     event.preventDefault();
-    if (
-      !UsernameRegister ||
-      !RePasswordRegister ||
-      PasswordRegister != RePasswordRegister
-    ) {
-      toast.error("Vui lòng điền đầy đủ thông tin đăng ký");
-    } else {
+    try {
+      // Kiểm tra điều kiện đăng ký
+      if (
+        !UsernameRegister ||
+        !RePasswordRegister ||
+        PasswordRegister !== RePasswordRegister
+      ) {
+        toast.error("Vui lòng điền đầy đủ thông tin đăng ký");
+        return; // Thoát khỏi hàm nếu điều kiện không đúng
+      }
+      if (!emailRegex.test(UsernameRegister)) {
+        toast.error("Vui lòng nhập đúng cú pháp email");
+        return; // Thoát khỏi hàm nếu điều kiện không đúng
+      }
       setIsActive(true);
 
-      axios
-        .post("http://localhost:3003/api/v1/register", {
+      // Gửi yêu cầu đăng ký
+      const response = await axios.post(
+        "http://localhost:3003/api/v1/register",
+        {
           username: UsernameRegister,
           password: PasswordRegister,
-        })
-        .then((response) => {
-          // Xử lý phản hồi từ máy chủ nếu cần
+        }
+      );
 
-          if (response.data.EC == 1) {
-            axios.post("http://localhost:3001/api/createUser", {
-              username: UsernameRegister,
-            });
-            toast.success("Đăng ký thành công");
-          } else {
-            toast.error(response.data.EM);
-          }
-        })
-        .catch((error) => {});
+      // Xử lý phản hồi từ máy chủ
+      if (response.data.EC === 1) {
+        toast.success("Đăng ký thành công");
+        setIsActive(false); // Đảm bảo trạng thái active được cập nhật
+      } else {
+        toast.error(response.data.EM);
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      toast.error("Có lỗi xảy ra trong quá trình đăng ký");
+    } finally {
     }
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    if (!UsernameLogin || !PasswordLogin) {
-      toast.error("Vui lòng điền đầy đủ thông tin đăng nhập");
-    } else {
+    try {
+      // Kiểm tra điều kiện đăng nhập
+      if (!UsernameLogin || !PasswordLogin) {
+        toast.error("Vui lòng điền đầy đủ thông tin đăng nhập");
+        return; // Thoát khỏi hàm nếu điều kiện không đúng
+      }
+      // if (!emailRegex.test(UsernameRegister)) {
+      //   toast.error("Vui lòng nhập đúng cú pháp email");
+      //   return; // Thoát khỏi hàm nếu điều kiện không đúng
+      // }
       setIsActive(false);
-      axios
-        .post("http://localhost:3003/api/v1/login", {
-          username: UsernameLogin,
-          password: PasswordLogin,
-        })
-        .then((response) => {
-          if (response.data.EC == 1) {
-            sessionStorage.setItem(
-              "accessToken",
-              response.data.DT.access_token
-            );
 
-            toast.success("Đăng nhập thành công");
+      // Gửi yêu cầu đăng nhập
+      const response = await axios.post("http://localhost:3003/api/v1/login", {
+        username: UsernameLogin,
+        password: PasswordLogin,
+      });
 
-            navigate(`/`);
-          } else {
-            toast.error("Đăng nhập thất bại");
-          }
-        })
-        .catch((error) => {
-          // Xử lý lỗi nếu cần
-        });
+      // Xử lý phản hồi từ máy chủ
+      if (response.data.EC === 1) {
+        sessionStorage.setItem("accessToken", response.data.DT.access_token);
+        toast.success("Đăng nhập thành công");
+        navigate(`/`);
+      } else {
+        toast.error("Đăng nhập thất bại");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast.error("Có lỗi xảy ra trong quá trình đăng nhập");
+    } finally {
+      setIsActive(false); // Đảm bảo trạng thái active được cập nhật
     }
   };
 
@@ -132,7 +147,7 @@ const Login = () => {
                   className="text-input"
                   onChange={(event) => setUsernameRegister(event.target.value)}
                 />
-                <div className="labelline"> Username</div>
+                <div className="labelline"> Email</div>
               </div>
 
               <div className="couple-text">
@@ -187,7 +202,7 @@ const Login = () => {
                   className="text-input"
                   onChange={(event) => setUsernameLogin(event.target.value)}
                 />
-                <div className="labelline"> Username</div>
+                <div className="labelline"> Email</div>
               </div>
 
               <div className="couple-text">
@@ -200,9 +215,7 @@ const Login = () => {
                 />
                 <div className="labelline"> Password</div>
               </div>
-              <a href="" className="tag">
-                forget your password ?
-              </a>
+              <a className="tag">forget your password ?</a>
               <button className="btn-accept" onClick={handleLogin}>
                 Đăng nhập
               </button>

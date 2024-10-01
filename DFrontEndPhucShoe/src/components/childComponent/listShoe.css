@@ -102,4 +102,11 @@
     height: 30px;
     font-size: 20px;
     z-index: 300;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.add-cart:hover {
+    color: #a0b5c0;
+    transform: scale(1.1);
 }

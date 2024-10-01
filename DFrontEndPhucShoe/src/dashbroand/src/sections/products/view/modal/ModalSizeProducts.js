@@ -65,7 +65,7 @@ const ModalCreateProducts = ({
       return;
     }
     if (GetdataSizeGiay < 10 || GetdataSizeGiay > 70) {
-      toast.error("Size giày thật là oải chưởng -,-");
+      toast.error("Size trang phục thật là oải chưởng -,-");
       return;
     }
     try {
@@ -110,7 +110,7 @@ const ModalCreateProducts = ({
   return (
     <div>
       <button onClick={openModal} className=" btn-dark btn">
-        Thêm Size Giày
+        Thêm Size Trang Phục
       </button>
       <Modal
         isOpen={modalIsOpenHangGiay}
@@ -125,7 +125,7 @@ const ModalCreateProducts = ({
           <div className="modalRegister">
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">
-                <h4> Thêm size giày</h4>
+                <h4> Thêm size trang phục</h4>
               </label>
               <input
                 type="email"
@@ -135,14 +135,14 @@ const ModalCreateProducts = ({
                 onChange={(event) => setGetdataSizeGiay(event.target.value)}
               />
               <button className="btn btn-success" onClick={XacNhanTaoSizeGiay}>
-                Thêm size giày
+                Thêm size trang phục
               </button>
             </div>
 
             <table className="hang-table">
               <thead>
                 <tr>
-                  <th>Tên Hàng</th>
+                  <th>Tên Hãng</th>
                   <th>Chức Năng</th>
                 </tr>
               </thead>

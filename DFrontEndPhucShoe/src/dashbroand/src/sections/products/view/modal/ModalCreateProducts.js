@@ -129,7 +129,7 @@ const ModalCreateProducts = ({
       return;
     }
     if (SoLuongShoe > 200) {
-      toast.error("Số lượng giày quá lớn rồi :<");
+      toast.error("Số lượng quần áo quá lớn rồi :<");
       return;
     }
     if (GiabanShoe > 10000000) {
@@ -262,7 +262,7 @@ const ModalCreateProducts = ({
 
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">
-                Tên giày
+                Tên Quần Áo
               </label>
               <input
                 type="text"
@@ -270,7 +270,7 @@ const ModalCreateProducts = ({
                   inputErrors.TengiayShoe ? "border-danger" : ""
                 }`}
                 id="exampleFormControlInput1"
-                placeholder="Giày MWC NT85"
+                placeholder="Bộ Quần Áo MWC NT85"
                 disabled={DisableInput}
                 onChange={(event) => setTengiayShoe(event.target.value)}
                 onFocus={() => handleFocus("TengiayShoe")}
@@ -286,7 +286,7 @@ const ModalCreateProducts = ({
                 disabled={DisableInput}
                 onChange={(event) => setHanggiayShoe(event.target.value)} // Di chuyển sự kiện onChange lên đây
               >
-                <option selected>Chọn hãng giày</option>
+                <option selected>Chọn hãng quần áo</option>
                 {DataHangBackend.map((hang) => (
                   <option key={hang.MAHANG} value={hang.MAHANG}>
                     {hang.TENHANG}
@@ -299,14 +299,14 @@ const ModalCreateProducts = ({
                 for="inputGroupSelect02"
                 onClick={CreateHangGiay}
               >
-                Thêm hãng giày
+                Thêm hãng quần áo
               </label>
             </div>
             {/* -------------------------------THEM HANG GIAY ----------------------------------- */}
             {isOpenHangGiay ? (
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">
-                  <h4> Thêm hãng giày</h4>
+                  <h4> Thêm hãng quần áo</h4>
                 </label>
                 <input
                   type="text"
@@ -319,7 +319,7 @@ const ModalCreateProducts = ({
                   className="btn btn-success"
                   onClick={XacNhanTaoHangGiay}
                 >
-                  Thêm hãng giày
+                  Thêm hãng quần áo
                 </button>
               </div>
             ) : (
@@ -328,7 +328,7 @@ const ModalCreateProducts = ({
             {/* -----------------------------END -------------------------------------- */}
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">
-                Giá bán giày
+                Giá bán quần áo
               </label>
               <input
                 onFocus={() => handleFocus("GiabanShoe")}
@@ -368,7 +368,7 @@ const ModalCreateProducts = ({
                 disabled={DisableInput}
                 onChange={(event) => setLoaiGiayShoe(event.target.value)}
               >
-                <option selected> Chọn loại giày</option>
+                <option selected> Chọn loại quần áo</option>
                 {DataLoaiBackend.map((loai) => (
                   <option key={loai.MALOAI} value={loai.MALOAI}>
                     {loai.name}
@@ -380,14 +380,14 @@ const ModalCreateProducts = ({
                 for="inputGroupSelect02"
                 onClick={CreateLoaiGiay}
               >
-                Thêm Loại Giày
+                Thêm Loại Quần Áo
               </label>
             </div>
             {/* ------------------------------------THEM LOAI GIAY-------------------------------------- */}
             {isOpenLoaiGiay ? (
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">
-                  <h4> Thêm loại giày</h4>
+                  <h4> Thêm loại quần áo</h4>
                 </label>
                 <input
                   type="text"
@@ -400,7 +400,7 @@ const ModalCreateProducts = ({
                   className="btn btn-success"
                   onClick={XacNhanTaoLoaiGiay}
                 >
-                  Thêm loại giày
+                  Thêm loại quần áo
                 </button>
               </div>
             ) : (
@@ -417,7 +417,7 @@ const ModalCreateProducts = ({
                 onChange={(event) => setSizeGiayShoe(event.target.value)}
                 onFocus={() => handleFocus("SizeGiayShoe")}
               >
-                <option selected> Chọn size giày</option>
+                <option selected> Chọn size quần áo</option>
                 {DataSizeBackend.map((size) => (
                   <option key={size.MAGIATRI} value={size.MAGIATRI}>
                     {size.GIATRI}
@@ -429,13 +429,13 @@ const ModalCreateProducts = ({
                 for="inputGroupSelect02"
                 onClick={CreateSizeGiay}
               >
-                Thêm Size Giày
+                Thêm Size Quần Áo
               </label>
             </div>
             {isOpenSizeGiay ? (
               <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">
-                  <h4> Thêm size giày</h4>
+                  <h4> Thêm size quần áo</h4>
                 </label>
                 <input
                   type="number"
@@ -472,7 +472,7 @@ const ModalCreateProducts = ({
             </div>
             <div class="mb-3">
               <label for="exampleFormControlTextarea1" class="form-label">
-                Thông tin về đôi giày
+                Thông tin về bộ trang phục
               </label>
               <textarea
                 onFocus={() => handleFocus("ThongtinShoe")}

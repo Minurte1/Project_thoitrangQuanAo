@@ -101,7 +101,7 @@ const ModalCreateProducts = ({
   return (
     <div>
       <button onClick={openModal} className="btn-dark btn">
-        Thêm Loại Giày
+        Thêm Loại Trang Phục
       </button>
       <Modal
         isOpen={modalIsOpenHangGiay}
@@ -116,7 +116,7 @@ const ModalCreateProducts = ({
           <div className="modalRegister">
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">
-                <h4> Thêm loại giày</h4>
+                <h4> Thêm loại trang phục</h4>
               </label>
               <input
                 type="email"
@@ -126,7 +126,7 @@ const ModalCreateProducts = ({
                 onChange={(event) => setGetdataLoaiGiay(event.target.value)}
               />
               <button className="btn btn-success" onClick={XacNhanTaoLoaiGiay}>
-                Thêm loại giày
+                Thêm loại trang phục
               </button>
             </div>
 

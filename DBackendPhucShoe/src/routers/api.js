@@ -61,6 +61,8 @@ const {
   cartUser,
   getDataCartUser,
   deleteCartUser,
+  thanhToanCartUser,
+  soLuongSPtrongGioHang,
 } = require("../controllers/cartController");
 const { checkUserJWT } = require("../middleware/JWTaction"); //test 1 số route có chứa hàm này
 const storage = multer.diskStorage({
@@ -184,4 +186,6 @@ router.post("/cart", cartUser);
 router.post("/cart/data", getDataCartUser);
 router.post("/user/thongtin", getDataUser);
 router.post("/cart/delete", deleteCartUser);
+router.post("/cart/thanhtoan", thanhToanCartUser);
+router.post("/cart/quantity/", soLuongSPtrongGioHang);
 module.exports = router; // Di chuyển dòng này về cuối tệp của bạn

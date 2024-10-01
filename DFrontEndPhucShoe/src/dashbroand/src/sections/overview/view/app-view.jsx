@@ -19,7 +19,7 @@ import AppConversionRates from "../app-conversion-rates";
 import axios from "axios";
 import bag from "../../../../public/assets/icons/glass/ic_glass_bag.png";
 import buy from "../../../../public/assets/icons/glass/ic_glass_buy.png";
-import shoes from "../../../../public/assets/icons/glass/shoes.png";
+import shoes from "../../../../public/assets/icons/glass/clothes.png";
 import user from "../../../../public/assets/icons/glass/ic_glass_users.png";
 
 // ----------------------------------------------------------------------
@@ -66,16 +66,17 @@ function AppView() {
   const fetchDataTAA = async () => {
     try {
       // Gửi tất cả các yêu cầu song song
-      const [responseUser, response1, response2, response3, response4] = await Promise.all([
-        axios.get("http://localhost:3003/api/v1/countuser"),
-        axios.get("http://localhost:3003/api/v1/productall/hang"),
-        axios.get("http://localhost:3003/api/v1/productall/loai"),
-        axios.post("http://localhost:3003/api/v1/productall/thang", {
-          nam: currentYear,
-          thang: currentMonth,
-        }),
-        axios.get("http://localhost:3003/api/v1/productall/nam"),
-      ]);
+      const [responseUser, response1, response2, response3, response4] =
+        await Promise.all([
+          axios.get("http://localhost:3003/api/v1/countuser"),
+          axios.get("http://localhost:3003/api/v1/productall/hang"),
+          axios.get("http://localhost:3003/api/v1/productall/loai"),
+          axios.post("http://localhost:3003/api/v1/productall/thang", {
+            nam: currentYear,
+            thang: currentMonth,
+          }),
+          axios.get("http://localhost:3003/api/v1/productall/nam"),
+        ]);
 
       // Cập nhật state với dữ liệu nhận được
       setTongSoLuongUser(responseUser.data);
@@ -83,7 +84,6 @@ function AppView() {
       setTongSoCacLoaiGiayBanDuoc(response2.data.DT);
       setbestSellingProductOfMonth(response3.data.DT);
       setTongSoCacHangBanDuoctheonam(response4.data.DT);
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -99,7 +99,7 @@ function AppView() {
       console.error("Error fetching data:", error);
     }
   };
-  console.log(TongSoCacHangBanDuoctheonam)
+  console.log(TongSoCacHangBanDuoctheonam);
   if (
     !TongSoCacHangBanDuoc ||
     !TongSoCacLoaiGiayBanDuoc ||
@@ -120,7 +120,6 @@ function AppView() {
     label: item.TenSanPham,
     value: item.TongSoSanPhamDaBan,
   }));
-
 
   const soluongdonhangtheonam = TongSoCacHangBanDuoctheonam.map(
     (item, index) => ({
@@ -208,7 +207,7 @@ function AppView() {
 
         <Grid item xs={12} md={6} lg={4}>
           <AppCurrentVisits
-            title="Tỷ lệ khách hàng mua giày theo các hãng"
+            title="Tỷ lệ khách hàng mua đồ theo các hãng"
             chart={{
               series: series,
             }}
@@ -245,7 +244,7 @@ function AppView() {
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <AppCurrentVisits
-            title="Xu hướng mua giày của khách hàng"
+            title="Xu hướng mua đồ của khách hàng"
             chart={{
               series: seriesXuHuong,
             }}

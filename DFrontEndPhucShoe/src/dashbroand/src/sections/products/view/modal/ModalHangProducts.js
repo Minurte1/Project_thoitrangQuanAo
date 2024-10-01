@@ -100,7 +100,7 @@ const ModalHangProducts = ({
   return (
     <div>
       <button onClick={openModal} className="btn-dark btn">
-        Thêm Hãng Giày
+        Thêm Hãng Trang Phục
       </button>
       <Modal
         isOpen={modalIsOpenHangGiay}
@@ -116,7 +116,7 @@ const ModalHangProducts = ({
           <div className="modalRegister">
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">
-                <h2> Thêm hãng giày</h2>
+                <h2> Thêm hãng trang phục</h2>
               </label>
               <input
                 type="email"
@@ -126,14 +126,14 @@ const ModalHangProducts = ({
                 onChange={(event) => setGetdataHangGiay(event.target.value)}
               />
               <button className="btn btn-success" onClick={XacNhanTaoHangGiay}>
-                Thêm hãng giày
+                Thêm hãng trang phục
               </button>
             </div>
-            <h5>Danh sách hãng giày</h5>
+            <h5>Danh sách hãng trang phục</h5>
             <table className="hang-table">
               <thead>
                 <tr>
-                  <th>Tên Hàng</th>
+                  <th>Tên Hãng</th>
                   <th>Chức Năng</th>
                 </tr>
               </thead>

@@ -13,6 +13,14 @@
     /* Thêm box-shadow */
 }
 
+.icon-cart {
+    cursor: pointer;
+}
+
+.icon-cart:hover {
+    transform: scale(1.1);
+    text-decoration: none;
+}
 
 .nav {
     width: 100%;

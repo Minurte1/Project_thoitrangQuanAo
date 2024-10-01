@@ -4,13 +4,14 @@ import "./listShoe.css";
 import { Modal, Button } from "react-bootstrap";
 import { tokenSession } from "../../services/serviesTokenSessionStored";
 import CookiesAxios from "../../services/CookiesAxios";
-
+import { useCart } from "../../CartContext";
 // React Component for rendering each shoe item
 const ShoeItem = ({ shoe, navigate }) => {
   const [showModal, setShowModal] = useState(false);
-
+  const { addToCart } = useCart();
   const handleAddCart = async () => {
     const username = await tokenSession();
+
     if (!username) {
       setShowModal(true);
     } else {
@@ -20,6 +21,9 @@ const ShoeItem = ({ shoe, navigate }) => {
           { username: username, product: shoe }
         );
         console.log(response.data); // In ra phản hồi từ server
+        if (response.data.EC === 1) {
+          addToCart(username);
+        }
       } catch (error) {
         console.error(
           "Lỗi khi thêm sản phẩm vào giỏ hàng:",

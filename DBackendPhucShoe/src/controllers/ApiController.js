@@ -14,7 +14,7 @@ const getAllProduct = async (req, res) => {
     if (req.query.page && req.query.limit) {
       let page = req.query.page;
       let limit = req.query.limit;
-      console.log("check data", page, limit);
+      // console.log("check data", page, limit);
       let offset = (page - 1) * limit;
 
       const [results, fields] = await connection.execute(
@@ -41,7 +41,7 @@ const getAllProduct = async (req, res) => {
         totalPages: totalPages,
         users: fields,
       };
-      console.log("check total", page, limit, data.totalPages);
+      // console.log("check total", page, limit, data.totalPages);
       return res.status(200).json({
         message: "ok",
         data: data,
@@ -86,7 +86,7 @@ const getDonHangg = async (Time, id, MaSP, SoluongDaMua, Tongtien) => {
     do {
       IdDonHang = generateRandomCustomerID();
       try {
-        console.log(IdDonHang);
+        // console.log(IdDonHang);
         const [results, fields] = await (
           await connection
         ).query(
@@ -116,8 +116,8 @@ const getDonHangg = async (Time, id, MaSP, SoluongDaMua, Tongtien) => {
 };
 
 const DeleteDonHang = async (req, res) => {
-  var productID = req.params.id;
-  console.log(">> productID = ", productID);
+  // var productID = req.params.id;
+  // console.log(">> productID = ", productID);
   await (
     await connection
   ).query("DELETE FROM CHITIETDONHANG WHERE MADONHANG = ?", [productID]);
@@ -171,7 +171,7 @@ const generateRandomCustomerID = () => {
 const getDeleteUser = async (req, res) => {
   try {
     var productID = req.params.id;
-    console.log(">> productID = ", productID);
+    // console.log(">> productID = ", productID);
 
     const [results, fields] = await (
       await connection
@@ -188,15 +188,15 @@ const getDeleteUser = async (req, res) => {
 const getProduct = async (req, res) => {
   try {
     const currentTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-    console.log("body", req.body);
+    // console.log("body", req.body);
     const { data } = req.body;
 
     const { orderTime, size, ...customerInfo } = data;
-    console.log(req.body.kichCo);
+    // console.log(req.body.kichCo);
 
-    console.log(currentTime);
-    console.log(req.body.customerID);
-    console.log(req.body.dataDiachi);
+    // console.log(currentTime);
+    // console.log(req.body.customerID);
+    // console.log(req.body.dataDiachi);
     const DiachiKhachhang = req.body.dataDiachi;
     let id = req.body.customerID;
     let Time = currentTime;
@@ -207,7 +207,7 @@ const getProduct = async (req, res) => {
 
     let isIdUnique = false;
     let newId;
-    console.log("name=>", name);
+    // console.log("name=>", name);
     // Thử insert dữ liệu và kiểm tra xem có lỗi Duplicate entry hay không
     do {
       newId = generateRandomCustomerID();

@@ -48,7 +48,7 @@ const loginUser = async (req, res) => {
     const taikhoan = req.body.username;
     const matkhau = req.body.password;
     const results = await postLoginUser(taikhoan, matkhau);
-    console.log("User logged in", results);
+    // console.log("User logged in", results);
     if (results && results.DT && results.DT.access_token) {
       res.cookie("jwt", results.DT.access_token, {
         httpOnly: true,
@@ -183,7 +183,7 @@ const loginAdmin = async (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
-    console.log(username, password);
+    // console.log(username, password);
     const results = await postLoginAdmin(username, password);
     if (results && results.DT && results.DT.access_token) {
       res.cookie("jwt", results.DT.access_token, {

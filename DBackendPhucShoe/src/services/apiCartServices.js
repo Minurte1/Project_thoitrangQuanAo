@@ -1,4 +1,5 @@
 const pool = require("../config/old");
+const { format } = require("date-fns");
 const cartUserServices = async (username, product, quantity = 1) => {
   try {
     // Check if the user exists in the 'khachhang' table
@@ -22,7 +23,7 @@ const cartUserServices = async (username, product, quantity = 1) => {
       `SELECT *, so_luong FROM gio_hang WHERE MAKHACHHANG = ? AND MASP = ?`,
       [MAKHACHHANG, product.MASP]
     );
-    console.log("results_giohang", results_giohang.length);
+    // console.log("results_giohang", results_giohang.length);
     if (results_giohang.length > 0) {
       // If the product exists in the cart, update the quantity
       const so_luong_trongGioHang = results_giohang[0].so_luong;
@@ -30,8 +31,8 @@ const cartUserServices = async (username, product, quantity = 1) => {
       const tong_tien =
         parseFloat(so_tien_trongGioHang) + parseFloat(product.GIA);
       const newQuantity = so_luong_trongGioHang + quantity;
-      console.log("tong_tien", tong_tien);
-      console.log("newQuantity", newQuantity);
+      // console.log("tong_tien", tong_tien);
+      // console.log("newQuantity", newQuantity);
       await pool.execute(
         `UPDATE gio_hang SET so_luong = ?, tong_tien=? WHERE ma_gio_hang = ?`,
         [newQuantity, tong_tien, results_giohang[0].ma_gio_hang]
@@ -87,7 +88,7 @@ const getDataCartUserServices = async (username) => {
       `SELECT * FROM gio_hang WHERE MAKHACHHANG = ? `,
       [MAKHACHHANG]
     );
-    console.log("results_giohang", results_giohang);
+    // console.log("results_giohang", results_giohang);
     if (results_giohang.length > 0) {
       const [results_data, fields_data] = await pool.execute(
         `SELECT sanpham.*, gio_hang.* FROM sanpham, gio_hang WHERE  sanpham.MASP = gio_hang.MASP and gio_hang.MAKHACHHANG = ? `,
@@ -97,7 +98,7 @@ const getDataCartUserServices = async (username) => {
         `SELECT sum(tong_tien) as tongSoTien FROM  gio_hang WHERE MAKHACHHANG = ? `,
         [MAKHACHHANG]
       );
-      console.log("results_giohang", results_[0]);
+      // console.log("results_giohang", results_[0]);
       return {
         EM: "Xem giỏ hàng thành công",
         EC: 1,
@@ -122,22 +123,156 @@ const getDataCartUserServices = async (username) => {
 
 const deleteCart = async (ma_gio_hang) => {
   try {
-    const [result, fields] = await pool.execute(
-      "DELETE FROM gio_hang WHERE ma_gio_hang = ?",
+    // Lấy giá trị so_luong hiện tại của sản phẩm trong giỏ hàng
+    const [rows] = await pool.execute(
+      "SELECT so_luong FROM gio_hang WHERE ma_gio_hang = ?",
       [ma_gio_hang]
     );
 
+    // Kiểm tra nếu sản phẩm tồn tại
+    if (rows.length > 0) {
+      const currentQuantity = rows[0].so_luong;
+
+      // Nếu số lượng lớn hơn 1, thì giảm đi 1
+      if (currentQuantity > 1) {
+        await pool.execute(
+          "UPDATE gio_hang SET so_luong = so_luong - 1 WHERE ma_gio_hang = ?",
+          [ma_gio_hang]
+        );
+        return {
+          EM: "Giảm số lượng sản phẩm thành công",
+          EC: 1,
+          DT: [],
+        };
+      } else {
+        // Nếu số lượng bằng 1, có thể xóa sản phẩm khỏi giỏ hàng
+        await pool.execute("DELETE FROM gio_hang WHERE ma_gio_hang = ?", [
+          ma_gio_hang,
+        ]);
+        return {
+          EM: "Đã xóa sản phẩm khỏi giỏ hàng",
+          EC: 1,
+          DT: [],
+        };
+      }
+    } else {
+      return {
+        EM: "Sản phẩm không tồn tại trong giỏ hàng",
+        EC: 0,
+        DT: [],
+      };
+    }
+  } catch (error) {
+    console.error("Error processing cart update:", error);
     return {
-      EM: "Loại bỏ sản phẩm thành công",
+      EM: "Có lỗi xảy ra trong quá trình cập nhật giỏ hàng",
+      EC: -1,
+      DT: error,
+    };
+  }
+};
+const thanhToanCartServices = async (
+  MAKHACHHANG,
+  name,
+  diachi,
+  phone,
+  dataCart
+) => {
+  const currentTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+  const connection = await pool.getConnection(); // Sử dụng connection để quản lý transaction
+  try {
+    await connection.beginTransaction(); // Bắt đầu transaction
+
+    // Xóa giỏ hàng theo MAKHACHHANG
+    await connection.execute("DELETE FROM gio_hang WHERE MAKHACHHANG = ?", [
+      MAKHACHHANG,
+    ]);
+
+    // Thêm vào bảng donhang
+    const [donHangResult] = await connection.execute(
+      "INSERT INTO donhang (MAKHACHHANG, NGAYDONHANG, TRANGTHAI, ten, diachi, sodienthoai, ghichu) VALUES (?, ?, 'ChuaGiao', ?, ?, ?, NULL)",
+      [MAKHACHHANG, currentTime, name, diachi, phone]
+    );
+
+    const MADONHANG = donHangResult.insertId; // Lấy ID của đơn hàng vừa được thêm
+
+    // Thêm vào bảng chitietdonhang
+    for (const item of dataCart) {
+      const { MASP, SOLUONG, tong_tien } = item;
+      await connection.execute(
+        "INSERT INTO chitietdonhang (MADONHANG, MASP, SOLUONG, THANHTIEN, TRANGTHAI) VALUES (?, ?, ?, ?, 'ChuaGiao')",
+        [MADONHANG, MASP, SOLUONG, tong_tien]
+      );
+    }
+
+    // Commit transaction sau khi thành công
+    await connection.commit();
+
+    return {
+      EM: "Thanh toán thành công",
       EC: 1,
       DT: [],
     };
   } catch (error) {
-    console.error("Error processing cart update:", error);
+    await connection.rollback(); // Rollback nếu có lỗi
+    console.error("Error processing cart checkout:", error);
     return {
-      EM: "Có lỗi xảy ra trong quá trình xử lý giỏ hàng",
+      EM: "Có lỗi xảy ra trong quá trình thanh toán",
       EC: -1,
       DT: error,
+    };
+  } finally {
+    connection.release(); // Đảm bảo release connection sau khi hoàn tất
+  }
+};
+const soLuongSPtrongGHServices = async (username) => {
+  try {
+    // Truy vấn tổng số lượng sản phẩm trong giỏ hàng theo MAKHACHHANG
+    console.log("username", username);
+    // Check if the user exists in the 'khachhang' table
+    const [results, fields] = await pool.execute(
+      `SELECT MAKHACHHANG FROM khachhang WHERE taikhoan = ?`,
+      [username]
+    );
+
+    if (results.length === 0) {
+      return {
+        EM: "Người mua không tồn tại",
+        EC: 0,
+        DT: [],
+      };
+    }
+
+    const MAKHACHHANG = results[0].MAKHACHHANG;
+
+    const [rows] = await pool.execute(
+      `SELECT SUM(so_luong) AS totalQuantity
+       FROM gio_hang
+       WHERE MAKHACHHANG = ?`,
+      [MAKHACHHANG]
+    );
+
+    // Kiểm tra xem giỏ hàng có sản phẩm hay không
+    console.log(rows[0].totalQuantity);
+    if (rows.length > 0 && rows[0].totalQuantity !== null) {
+      return {
+        EM: "Số lượng sản phẩm thành công",
+        EC: 1,
+        DT: rows[0].totalQuantity,
+      };
+    } else {
+      return {
+        EM: "Giỏ hàng đang rỗng",
+        EC: 1,
+        DT: [],
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching cart quantity:", error);
+    return {
+      EM: "Có lỗi xảy ra khi tính số lượng sản phẩm",
+      EC: -1,
+      error: error.message,
     };
   }
 };
@@ -145,4 +280,6 @@ module.exports = {
   cartUserServices,
   getDataCartUserServices,
   deleteCart,
+  thanhToanCartServices,
+  soLuongSPtrongGHServices,
 };

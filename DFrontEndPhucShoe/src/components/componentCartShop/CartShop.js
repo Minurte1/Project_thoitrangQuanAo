@@ -3,6 +3,8 @@ import { Modal, Button, Form, Card } from "react-bootstrap";
 import "./CartShop.css";
 import { tokenSession } from "../../services/serviesTokenSessionStored";
 import CookiesAxios from "../../services/CookiesAxios";
+import { toast } from "react-toastify";
+import { useCart } from "../../CartContext";
 const ShoppingCart = ({ handleClose, handleShow, show }) => {
   const [dataCart, setDataCart] = useState([]);
   const [tongSoTien, setTongSoTien] = useState(null);
@@ -12,66 +14,72 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
   const [address, setAddress] = useState(dataUser.DIACHI);
   const [phone, setPhone] = useState(dataUser.SODIENTHOAI);
   const [avatar, setAvatar] = useState(dataUser.avatar);
-
+  const [maKhachHang, setMaKhachHang] = useState(null);
+  const { addToCart } = useCart();
   useEffect(() => {
     fetchCartUser();
     fetchUser();
   }, [show]);
   const fetchCartUser = async () => {
     const username = await tokenSession();
-    try {
-      const response = await CookiesAxios.post(
-        "http://localhost:3003/api/v1/cart/data",
-        { username: username }
-      );
+    if (username) {
+      try {
+        const response = await CookiesAxios.post(
+          "http://localhost:3003/api/v1/cart/data",
+          { username: username }
+        );
 
-      // Log the entire response to inspect its structure
-      console.log("Full response:", response);
+        // Log the entire response to inspect its structure
+        console.log("Full response:", response);
 
-      // Ensure the data property exists before accessing it
-      if (response && response.data) {
-        console.log("Response Data:", response.data);
-        if (response.data.EC === 1) {
-          if (
-            response.data.DT &&
-            response.data.DT.sanPham &&
-            response.data.DT.sanPham.length > 0
-          ) {
-            setDataCart(response.data.DT.sanPham);
-            setTongSoTien(response.data.DT.tongSoTien?.tongSoTien || 0); // Safeguard access to tongSoTien
+        // Ensure the data property exists before accessing it
+        if (response && response.data) {
+          console.log("Response Data:", response.data);
+          if (response.data.EC === 1) {
+            if (
+              response.data.DT &&
+              response.data.DT.sanPham &&
+              response.data.DT.sanPham.length > 0
+            ) {
+              setDataCart(response.data.DT.sanPham);
+              setTongSoTien(response.data.DT.tongSoTien?.tongSoTien || 0); // Safeguard access to tongSoTien
+            } else {
+              console.log("Không có sản phẩm nào trong giỏ hàng.");
+              setDataCart([]); // Giỏ hàng trống
+              setTongSoTien(0); // Đặt tổng số tiền về 0
+            }
           } else {
-            console.log("Không có sản phẩm nào trong giỏ hàng.");
-            setDataCart([]); // Giỏ hàng trống
-            setTongSoTien(0); // Đặt tổng số tiền về 0
+            console.log("Server error code is not 1:", response.data.EC);
           }
         } else {
-          console.log("Server error code is not 1:", response.data.EC);
+          console.error("Response does not contain expected 'data' structure.");
         }
-      } else {
-        console.error("Response does not contain expected 'data' structure.");
+      } catch (error) {
+        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error.message);
       }
-    } catch (error) {
-      console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error.message);
     }
   };
 
   const fetchUser = async () => {
     const username = await tokenSession();
-    try {
-      const response = await CookiesAxios.post(
-        "http://localhost:3003/api/v1/user/thongtin",
-        { username: username }
-      );
-      console.log(response.data); // In ra phản hồi từ server
-      if (response.data.EC === 1) {
-        setDataUser(response.data.DT);
-        setName(response.data.DT[0].TEN);
-        setPhone(response.data.DT[0].SODIENTHOAI);
-        setAvatar(response.data.DT[0].avatar);
-        setAddress(response.data.DT[0].DIACHI);
+    if (username) {
+      try {
+        const response = await CookiesAxios.post(
+          "http://localhost:3003/api/v1/user/thongtin",
+          { username: username }
+        );
+        console.log(response.data); // In ra phản hồi từ server
+        if (response.data.EC === 1) {
+          setDataUser(response.data.DT);
+          setName(response.data.DT[0].TEN);
+          setPhone(response.data.DT[0].SODIENTHOAI);
+          setAvatar(response.data.DT[0].avatar);
+          setAddress(response.data.DT[0].DIACHI);
+          setMaKhachHang(response.data.DT[0].MAKHACHHANG);
+        }
+      } catch (error) {
+        console.error("Lỗi khi xem thông tin người dùng:", error.response.data);
       }
-    } catch (error) {
-      console.error("Lỗi khi xem thông tin người dùng:", error.response.data);
     }
   };
   const formattedTongSoTien =
@@ -95,19 +103,24 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
       : []; // Nếu dataCart rỗng, trả về mảng rỗng
 
   const handleThanhToan = async () => {
-    const username = await tokenSession();
     try {
       const response = await CookiesAxios.post(
-        `http://localhost:3003/api/v1/productt`,
+        `http://localhost:3003/api/v1/cart/thanhtoan`,
         {
-          username: username,
+          MAKHACHHANG: maKhachHang,
           name: name,
           dataDiachi: address,
+          phone: phone,
+          dataCart,
         }
       );
 
-      console.log("Xóa thành công:", response.data);
       if (response.data.EC === 1) {
+        const username = await tokenSession();
+        setDataCart([]);
+        setTongSoTien("");
+        addToCart(username);
+        toast.success("Đã đặt hàng, chủ shop sẽ liên hệ với bạn nhanh nhất");
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
@@ -122,7 +135,9 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
 
       console.log("Xóa thành công:", response.data);
       if (response.data.EC === 1) {
+        const username = await tokenSession();
         fetchCartUser();
+        addToCart(username);
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
@@ -160,7 +175,7 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
                     <div>
                       <p className="mb-1">Giỏ hàng</p>
                       <p className="mb-0">
-                        Bạn có {"0" || "0"} mặt hàng trong giỏ hàng
+                        Bạn có {dataCart.length || "0"} mặt hàng trong giỏ hàng
                       </p>
                     </div>
                     <div>

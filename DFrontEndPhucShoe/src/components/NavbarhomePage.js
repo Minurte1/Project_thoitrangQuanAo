@@ -6,6 +6,9 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import avat from "../assets/img-avata/lufy2.jpg";
 import ShoppingCart from "./componentCartShop/CartShop";
+import Badge from "@mui/material/Badge";
+import Stack from "@mui/material/Stack";
+import { useCart } from "../CartContext";
 const MyNavbar = () => {
   const token = sessionStorage.getItem("accessToken");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,6 +20,7 @@ const MyNavbar = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const { soLuongSanPham, fetchSoLuongGioHang } = useCart();
   const axiosWithCredentials = axios.create({
     withCredentials: true,
     headers: {
@@ -39,6 +43,7 @@ const MyNavbar = () => {
     };
 
     fetchData();
+    fetchSoLuongGioHang(username);
   }, [username, axiosWithCredentials]);
 
   useEffect(() => {
@@ -99,7 +104,18 @@ const MyNavbar = () => {
             <div className="cart-divv">
               {isAuthenticated ? (
                 <div className="user-info">
-                  <i class="fa-solid fa-cart-shopping" onClick={handleShow}></i>
+                  {" "}
+                  <Stack spacing={2} direction="row">
+                    <Badge
+                      badgeContent={soLuongSanPham == 0 ? 0 : soLuongSanPham}
+                      color="secondary"
+                    >
+                      <i
+                        class="fa-solid fa-cart-shopping icon-cart"
+                        onClick={handleShow}
+                      ></i>
+                    </Badge>
+                  </Stack>
                   <span className="username">{username}</span>
                   <div className="nav-avatar" onClick={toggleDropdown}>
                     <img

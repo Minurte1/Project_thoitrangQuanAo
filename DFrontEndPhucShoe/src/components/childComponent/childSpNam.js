@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./listShoe.css";
 import "../childComponent/chillTatCaSP.css";
+import { tokenSession } from "../../services/serviesTokenSessionStored";
+import CookiesAxios from "../../services/CookiesAxios";
+import { useCart } from "../../CartContext";
+import { Modal, Button } from "react-bootstrap";
 
 export const handleItemClick = (shoe, navigate) => {
   navigate(`/thongtinchitietgiay/${shoe.MASP}`, { state: shoe });
@@ -24,7 +28,26 @@ export const renderShoeItem = (shoe, navigate) => {
     </li>
   );
 };
+export const handleAddCart = async (shoe, addToCart, setShowModal) => {
+  const username = await tokenSession();
 
+  if (!username) {
+    setShowModal(true);
+  } else {
+    try {
+      const response = await CookiesAxios.post(
+        "http://localhost:3003/api/v1/cart",
+        { username: username, product: shoe }
+      );
+      console.log(response.data); // In ra phản hồi từ server
+      if (response.data.EC === 1) {
+        addToCart(username);
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error.response.data);
+    }
+  }
+};
 export const ChildSPNam = ({ shoes }) => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,7 +55,8 @@ export const ChildSPNam = ({ shoes }) => {
   const [selectedBrand, setSelectedBrand] = useState("");
 
   const [selectedPriceRange, setSelectedPriceRange] = useState("Tất cả");
-
+  const [showModal, setShowModal] = useState(false);
+  const { addToCart } = useCart();
   const checkPriceRange = (price) => {
     const numericPrice = parseFloat(price);
 
@@ -103,23 +127,6 @@ export const ChildSPNam = ({ shoes }) => {
           Sắp xếp theo giá {sortOrder === "asc" ? "tăng dần" : "giảm dần"}
         </button>
       </div>
-      {/* <div className="dropdown-container">
-        <label className="label-brand" htmlFor="brandFilter">
-          Chọn hãng:
-        </label>
-        <select
-          id="brandFilter"
-          value={selectedBrand}
-          onChange={(e) => setSelectedBrand(e.target.value)}
-          className="select-brand"
-        >
-          {uniqueBrands.map((brand, index) => (
-            <option key={index} value={brand}>
-              {brand}
-            </option>
-          ))}
-        </select>
-      </div> */}
       <div className="dropdown-container">
         <label className="label-price" htmlFor="priceFilter">
           Chọn giá:
@@ -139,21 +146,45 @@ export const ChildSPNam = ({ shoes }) => {
           )}
         </select>
       </div>
-
       <hr></hr>
       <ul>
         {sortedShoes.map((shoe) => (
-          <li key={shoe.MASP} onClick={() => handleItemClick(shoe, navigate)}>
+          <li key={shoe.MASP}>
             <img
+              onClick={() => handleItemClick(shoe, navigate)}
               src={`http://localhost:3003/images/${shoe.description}`}
               alt={shoe.TENSANPHAM}
             />
             <p id="CLS-tensp">{shoe.TENSANPHAM}</p>
-            <p>{parseFloat(shoe.GIA).toLocaleString()}đ</p>
+            <p>{parseFloat(shoe.GIA).toLocaleString()}đ</p>{" "}
+            <i
+              onClick={() => handleAddCart(shoe, addToCart, setShowModal)}
+              className="fa-solid fa-cart-plus add-cart"
+            ></i>
           </li>
         ))}
       </ul>
-      <hr></hr>
+      <hr></hr>{" "}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bạn chưa đăng nhập</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có muốn đăng nhập để tiếp tục không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Không
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              setShowModal(false);
+              navigate("/login");
+            }}
+          >
+            Đăng nhập
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

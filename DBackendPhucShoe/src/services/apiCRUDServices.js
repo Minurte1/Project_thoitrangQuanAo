@@ -16,7 +16,7 @@ const checkPassword = (inputpassword, hashpass) => {
 };
 const getDataUserServices = async (taikhoan) => {
   try {
-    console.log(taikhoan);
+    // console.log(taikhoan);
     const [results1, fields1] = await connection.execute(
       "SELECT * from khachhang where taikhoan = ?",
       [taikhoan]
@@ -57,7 +57,7 @@ const createLoginUser = async (taikhoan, password) => {
       };
     }
     const matkhauHashed = hashPassword(password);
-    console.log(matkhauHashed);
+    // console.log(matkhauHashed);
     const [results, fields] = await connection.execute(
       `INSERT INTO users (taikhoan,matkhau) VALUES (?, ?)`,
       [taikhoan, matkhauHashed]
@@ -143,7 +143,7 @@ const getThongtinUser = async (taikhoan) => {
       "SELECT k.*,u.matkhau FROM `khachhang` as k, users as u where u.taikhoan = k.taikhoan and u.taikhoan = ?",
       [taikhoan]
     );
-    console.log(results);
+    // console.log(results);
     if (results.length > 0) {
       const [results1, fields1] = await connection.execute(
         "SELECT k.makhachhang,k.ten,k.diachi,k.ghichu,k.sodienthoai,d.madonhang,d.ngaydonhang,c.trangthai,s.tensanpham,s.gia,c.soluong,s.gia * c.soluong as tongtien from khachhang as k, donhang as d, chitietdonhang as c, sanpham as s where k.makhachhang = d.makhachhang and d.madonhang = c.madonhang and c.masp = s.masp and k.taikhoan = ?",
@@ -180,7 +180,7 @@ const updateUser = async (taikhoan, ten, diachi, sodienthoai) => {
       "select * from users where taikhoan = ?",
       [taikhoan]
     );
-    console.log("check resultls", results);
+    // console.log("check resultls", results);
     if (results.length > 0) {
       const [results2, fields] = await connection.execute(
         "update khachhang set ten = ?, diachi = ?, sodienthoai = ? where taikhoan = ?",
@@ -198,7 +198,6 @@ const updateUser = async (taikhoan, ten, diachi, sodienthoai) => {
         DT: [],
       };
     }
-    console.log(results);
   } catch (error) {
     console.error("Error in postLoginUser:", error);
     throw error;
@@ -211,7 +210,7 @@ const updateAvatarUser = async (taikhoan, avatar) => {
       "select * from users where taikhoan = ?",
       [taikhoan]
     );
-    console.log("check resultls", results);
+    // console.log("check resultls", results);
     if (results.length > 0) {
       const [results2, fields] = await connection.execute(
         "update khachhang set avatar = ? where taikhoan = ?",
@@ -229,7 +228,6 @@ const updateAvatarUser = async (taikhoan, avatar) => {
         DT: [],
       };
     }
-    console.log(results);
   } catch (error) {
     console.error("Error in postLoginUser:", error);
     throw error;
@@ -269,7 +267,6 @@ const updatePasswordUser = async (taikhoan, matkhaucu, matkhaumoi) => {
         DT: [],
       };
     }
-    console.log(results);
   } catch (error) {
     console.error("Error in postLoginUser:", error);
     throw error;
@@ -309,7 +306,7 @@ const UpdateAdmin = async (taikhoan, matkhau) => {
       };
     }
     const matkhauHashed = hashPassword(password);
-    console.log(matkhauHashed);
+    // console.log(matkhauHashed);
     const [results, fields] = await connection.execute(
       `INSERT INTO admin (username,password) VALUES (?, ?)`,
       [taikhoan, matkhauHashed]
@@ -346,7 +343,7 @@ const checkTaiKhoanAdmin = async (taikhoan) => {
 //Login for admin
 const postLoginAdmin = async (username, password) => {
   try {
-    console.log(username);
+    // console.log(username);
     const [results, fields] = await connection.execute(
       "SELECT * FROM `admin` where `username` = ?",
       [username]
@@ -366,7 +363,7 @@ const postLoginAdmin = async (username, password) => {
         };
 
         let token = createJWT(payloadWithRole);
-        console.log(token);
+        // console.log(token);
         return {
           EM: "Đăng nhập thành công",
           EC: 1,
@@ -408,7 +405,7 @@ const createLoginAdmin = async (taikhoan, password) => {
       };
     }
     const matkhauHashed = hashPassword(password);
-    console.log(matkhauHashed);
+    // console.log(matkhauHashed);
     const [results, fields] = await connection.execute(
       `INSERT INTO admin (username,password) VALUES (?, ?)`,
       [username, matkhauHashed]
