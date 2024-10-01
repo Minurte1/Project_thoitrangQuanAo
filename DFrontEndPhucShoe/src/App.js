@@ -20,9 +20,9 @@ import PrivateRoute from "../src/dashbroand/src/Authentication/PrivateRoute";
 import { AuthProvider } from "../src/dashbroand/src/Authentication/AuthContext";
 import LoginView from "./dashbroand/src/sections/login/login-view.jsx";
 import NotFoundPage from "./dashbroand/src/pages/page-not-found.jsx";
-import ChatRealTime from "./views/ComponentChat/ChatRealTime.jsx";
+
 import axios from "axios";
-import "./ChatRealTime-Css.css";
+
 import ForgotPasswordComponent from "./components/ComponentLogin/ForgetPassword.js";
 const App = () => {
   const tokenSetStorage = sessionStorage.getItem("accessToken");
@@ -77,7 +77,6 @@ const App = () => {
                 {isAuthenticated ? (
                   <div className="ChatRealTime-CssComponentThongtinchitiet">
                     {" "}
-                    <ChatRealTime />{" "}
                   </div>
                 ) : (
                   false
@@ -87,16 +86,7 @@ const App = () => {
               </>
             }
           />
-          {/* <Route
-            path="/thongtinchitietgiayseal/:shoes"
-            element={
-              <>
-                <MyNavbar />
-                <ThongTinChiTietGiaySeal />
-                <Footer />
-              </>
-            }
-          /> */}
+
           <Route
             path="/muahang/:id"
             element={
@@ -105,10 +95,7 @@ const App = () => {
 
                 <MuaHang />
                 {isAuthenticated ? (
-                  <div className="ChatRealTime-CssComponent-muahang">
-                    {" "}
-                    <ChatRealTime />{" "}
-                  </div>
+                  <div className="ChatRealTime-CssComponent-muahang"> </div>
                 ) : (
                   false
                 )}
@@ -122,10 +109,7 @@ const App = () => {
             element={
               <>
                 {isAuthenticated ? (
-                  <div className="ChatRealTime-CssComponent-tuyendung">
-                    {" "}
-                    <ChatRealTime />{" "}
-                  </div>
+                  <div className="ChatRealTime-CssComponent-tuyendung"> </div>
                 ) : (
                   false
                 )}
@@ -139,10 +123,7 @@ const App = () => {
               <>
                 {" "}
                 {isAuthenticated ? (
-                  <div className="ChatRealTime-CssComponent-tatcasp">
-                    {" "}
-                    <ChatRealTime />{" "}
-                  </div>
+                  <div className="ChatRealTime-CssComponent-tatcasp"> </div>
                 ) : (
                   false
                 )}
@@ -157,10 +138,7 @@ const App = () => {
                 {" "}
                 <SPNu />
                 {isAuthenticated ? (
-                  <div className="ChatRealTime-CssComponent-spnu">
-                    {" "}
-                    <ChatRealTime />{" "}
-                  </div>
+                  <div className="ChatRealTime-CssComponent-spnu"> </div>
                 ) : (
                   false
                 )}
@@ -174,10 +152,7 @@ const App = () => {
                 {" "}
                 <SPNam />{" "}
                 {isAuthenticated ? (
-                  <div className="ChatRealTime-CssComponent-spnam">
-                    {" "}
-                    <ChatRealTime />{" "}
-                  </div>
+                  <div className="ChatRealTime-CssComponent-spnam"> </div>
                 ) : (
                   false
                 )}
@@ -194,10 +169,7 @@ const App = () => {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 {isAuthenticated ? (
-                  <div className="ChatRealTime-CssComponent">
-                    {" "}
-                    <ChatRealTime />{" "}
-                  </div>
+                  <div className="ChatRealTime-CssComponent"> </div>
                 ) : (
                   false
                 )}

@@ -55,14 +55,7 @@ const HomePage = () => {
     <>
       <MyNavbar />
       <CarouselHomepage />
-      {isAuthenticated ? (
-        <>
-          {" "}
-          <ChatRealTime />
-        </>
-      ) : (
-        false
-      )}
+      {isAuthenticated ? <> </> : false}
 
       <ImfoHomepage />
       {/* <ShoppingCart /> */}
