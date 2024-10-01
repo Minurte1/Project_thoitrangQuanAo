@@ -49,6 +49,7 @@ export const handleAddCart = async (shoe, addToCart, setShowModal) => {
   }
 };
 export const ChildSPNam = ({ shoes }) => {
+  console.log(shoes);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("asc"); // 'asc' or 'desc'

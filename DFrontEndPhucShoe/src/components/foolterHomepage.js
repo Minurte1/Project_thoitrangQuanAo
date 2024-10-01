@@ -23,11 +23,9 @@ function Footer() {
             <div className="footer-thongtinlienhe">
               {" "}
               <p className="footer-thongtin2">Thông Tin Liên Hệ</p>
-              <p className="footer-thongtinlienhe_diachi">
-                Địa chỉ: Tỉnh Trà Vinh
-              </p>
-              <p>Email: hohoangphucjob@gmail.com</p>
-              <p>Hotline: 037248322</p>
+              <p className="footer-thongtinlienhe_diachi">Địa chỉ:</p>
+              <p>Email: </p>
+              <p>Hotline: </p>
             </div>
             <div className="footer-hr"></div>
             <div className="footer-chinhsach">
@@ -51,26 +49,17 @@ function Footer() {
               {" "}
               <p className="footer-thongtin2"> Mạng xã hội</p>
               <p>
-                <a
-                  href="https://www.facebook.com/magin2px/"
-                  className="thea footer-facebook"
-                >
+                <a href="#" className="thea footer-facebook">
                   Facebook
                 </a>
               </p>
               <p>
-                <a
-                  href="https://www.instagram.com/magin_phuc20px/"
-                  className="thea"
-                >
+                <a href="#" className="thea">
                   Instagram
                 </a>
               </p>
               <p>
-                <a
-                  href="https://www.tiktok.com/@phuc_magin2px"
-                  className="thea"
-                >
+                <a href="#" className="thea">
                   Tiktok
                 </a>
               </p>
