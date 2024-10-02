@@ -41,8 +41,8 @@ const cartUserServices = async (username, product, quantity = 1) => {
       const tong_tien =
         parseFloat(so_tien_trongGioHang) + parseFloat(product.GIA);
       const newQuantity = so_luong_trongGioHang + quantity;
-      // console.log("tong_tien", tong_tien);
-      // console.log("newQuantity", newQuantity);
+      console.log("tong_tien", tong_tien);
+      console.log("newQuantity", newQuantity);
       await pool.execute(
         `UPDATE gio_hang SET so_luong = ?, tong_tien=? WHERE ma_gio_hang = ?`,
         [newQuantity, tong_tien, results_giohang[0].ma_gio_hang]
@@ -133,27 +133,52 @@ const getDataCartUserServices = async (username) => {
 
 const deleteCart = async (ma_gio_hang) => {
   try {
-    // Lấy giá trị so_luong hiện tại của sản phẩm trong giỏ hàng
+    // Lấy giá trị so_luong và tong_tien hiện tại của sản phẩm trong giỏ hàng
     const [rows] = await pool.execute(
-      "SELECT so_luong FROM gio_hang WHERE ma_gio_hang = ?",
+      "SELECT MASP, so_luong, tong_tien, (tong_tien / so_luong) AS gia_san_pham FROM gio_hang WHERE ma_gio_hang = ?",
       [ma_gio_hang]
     );
+    console.log("productPrice", rows[0].MASP);
 
     // Kiểm tra nếu sản phẩm tồn tại
     if (rows.length > 0) {
       const currentQuantity = rows[0].so_luong;
+      const currentTotal = rows[0].tong_tien;
+      const [result_GIA] = await pool.execute(
+        "SELECT GIA  FROM sanpham WHERE MASP = ?",
+        [rows[0].MASP]
+      );
 
+      const productPrice = result_GIA[0].GIA; // Giá sản phẩm
+      console.log("productPrice", productPrice);
+      console.log("tongtien", currentTotal);
+      console.log("soluong", currentQuantity);
+      const newTongtien = currentTotal - productPrice;
       // Nếu số lượng lớn hơn 1, thì giảm đi 1
       if (currentQuantity > 1) {
         await pool.execute(
-          "UPDATE gio_hang SET so_luong = so_luong - 1 WHERE ma_gio_hang = ?",
+          "UPDATE gio_hang SET so_luong = so_luong - 1, tong_tien =? WHERE ma_gio_hang = ?",
+          [newTongtien, ma_gio_hang]
+        );
+        const [rows] = await pool.execute(
+          "SELECT MASP, so_luong, tong_tien, (tong_tien / so_luong) AS gia_san_pham FROM gio_hang WHERE ma_gio_hang = ?",
           [ma_gio_hang]
         );
-        return {
-          EM: "Giảm số lượng sản phẩm thành công",
-          EC: 1,
-          DT: [],
-        };
+        if (rows.length < 1) {
+          return {
+            EM: "Sản phẩm không tồn tại trong giỏ hàng",
+            EC: 0,
+            DT: [],
+          };
+        } else {
+          return {
+            EM: "Giảm số lượng sản phẩm thành công",
+            EC: 1,
+            DT: {
+              tong_tien: currentTotal - productPrice, // Tính tổng số tiền mới
+            },
+          };
+        }
       } else {
         // Nếu số lượng bằng 1, có thể xóa sản phẩm khỏi giỏ hàng
         await pool.execute("DELETE FROM gio_hang WHERE ma_gio_hang = ?", [
@@ -162,7 +187,9 @@ const deleteCart = async (ma_gio_hang) => {
         return {
           EM: "Đã xóa sản phẩm khỏi giỏ hàng",
           EC: 1,
-          DT: [],
+          DT: {
+            tong_tien: productPrice, // Trả về giá trị của sản phẩm đã xóa
+          },
         };
       }
     } else {
@@ -181,6 +208,7 @@ const deleteCart = async (ma_gio_hang) => {
     };
   }
 };
+
 const thanhToanCartServices = async (
   MAKHACHHANG,
   name,

@@ -5,6 +5,7 @@
 
 }
 
+
 .div-logomuahang {
     text-align: center;
     display: flex;
@@ -650,4 +651,30 @@ hr {
         font-size: 20px;
         color: #000000;
     }
+}
+
+.size-img-product {
+    width: 70px;
+    height: auto;
+    position: relative;
+
+}
+
+.discount-bannerr-cart {
+    width: 20px;
+    height: 20px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    font: 12px;
+    /* Change from left to right */
+    color: white;
+    background-color: #565252;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 50%;
+    z-index: 1;
+    margin-top: -5px;
+    margin-left: 4%;
 }

@@ -88,13 +88,13 @@ export const ShoeListSealNam = ({ shoes }) => {
   ) {
     return <div>No shoes available</div>;
   }
-
+  console.log(shoes);
   const filteredShoes = shoes.data.filter(
     (shoe) =>
       shoe.TENSANPHAM.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedBrand === "" || shoe.TENHANG === selectedBrand) &&
       (selectedPriceRange === "Tất cả" || checkPriceRange(shoe.GIA)) &&
-      shoe.MALOAI === 15
+      shoe.MALOAI === 19
   );
 
   const sortedShoes = [...filteredShoes].sort((a, b) => {

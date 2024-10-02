@@ -90,7 +90,7 @@ export const ChildSPNam = ({ shoes }) => {
       shoe.TENSANPHAM.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedBrand === "" || shoe.TENHANG === selectedBrand) &&
       (selectedPriceRange === "Tất cả" || checkPriceRange(shoe.GIA)) &&
-      shoe.MALOAI === 15
+      shoe.MALOAI === 19
   );
 
   // Sort the list based on the current sortOrder

@@ -98,10 +98,10 @@ export const ShoeList = ({ shoes }) => {
   try {
     // Lọc danh sách giày nam và giày nữ từ dữ liệu shoes.data
     const maleShoes = shoes.data
-      .filter((shoe) => String(shoe.MALOAI) === "15")
+      .filter((shoe) => String(shoe.MALOAI) === "18")
       .slice(0, 5);
     const femaleShoes = shoes.data
-      .filter((shoe) => String(shoe.MALOAI) === "16")
+      .filter((shoe) => String(shoe.MALOAI) === "19")
       .slice(0, 5);
 
     // Kết hợp danh sách giày nam và giày nữ

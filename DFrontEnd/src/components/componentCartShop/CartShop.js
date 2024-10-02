@@ -5,17 +5,25 @@ import { tokenSession } from "../../services/serviesTokenSessionStored";
 import CookiesAxios from "../../services/CookiesAxios";
 import { toast } from "react-toastify";
 import { useCart } from "../../CartContext";
+import { useNavigate } from "react-router-dom";
 const ShoppingCart = ({ handleClose, handleShow, show }) => {
-  const [dataCart, setDataCart] = useState([]);
-  const [tongSoTien, setTongSoTien] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" cho tăng dần, "desc" cho giảm dần
   const [dataUser, setDataUser] = useState([]);
   const [name, setName] = useState(dataUser.TEN);
   const [address, setAddress] = useState(dataUser.DIACHI);
   const [phone, setPhone] = useState(dataUser.SODIENTHOAI);
   const [avatar, setAvatar] = useState(dataUser.avatar);
-  const [maKhachHang, setMaKhachHang] = useState(null);
-  const { addToCart } = useCart();
+
+  const navigate = useNavigate();
+  const {
+    addToCart,
+    setDataCart,
+    dataCart,
+    maKhachHang,
+    setMaKhachHang,
+    tongSoTien,
+    setTongSoTien,
+  } = useCart();
   useEffect(() => {
     fetchCartUser();
     fetchUser();
@@ -103,41 +111,36 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
       : []; // Nếu dataCart rỗng, trả về mảng rỗng
 
   const handleThanhToan = async () => {
-    try {
-      const response = await CookiesAxios.post(
-        `http://localhost:3003/api/v1/cart/thanhtoan`,
-        {
-          MAKHACHHANG: maKhachHang,
-          name: name,
-          dataDiachi: address,
-          phone: phone,
-          dataCart,
-        }
-      );
-
-      if (response.data.EC === 1) {
-        const username = await tokenSession();
-        setDataCart([]);
-        setTongSoTien("");
-        addToCart(username);
-        toast.success("Đã đặt hàng, chủ shop sẽ liên hệ với bạn nhanh nhất");
-      }
-    } catch (error) {
-      console.error("Error removing item from cart:", error);
+    // Kiểm tra xem các trường cần thiết đã được điền hay chưa
+    if (!maKhachHang || !dataCart || dataCart.length === 0) {
+      toast.error("Vui lòng thêm hàng vào giỏ hàng của bạn.");
+      return; // Ngừng thực hiện nếu có trường không hợp lệ
     }
+    console.log("dataCart", dataCart);
+    navigate("/cart-mua-hang");
   };
+
   const handleRemoveItem = async (ma_gio_hang) => {
     try {
       const response = await CookiesAxios.post(
         `http://localhost:3003/api/v1/cart/delete`,
-        { ma_gio_hang: ma_gio_hang }
+        { ma_gio_hang: ma_gio_hang, MAKHACHHANG: maKhachHang }
       );
 
       console.log("Xóa thành công:", response.data);
       if (response.data.EC === 1) {
         const username = await tokenSession();
-        fetchCartUser();
+        console.log("response.data.DT.length", response.data.DT);
+
+        // Kiểm tra nếu DT tồn tại và không rỗng
+
+        setTongSoTien(response.data.DT);
+        fetchCartUser(); // Gọi hàm fetchCartUser nếu DT không rỗng
+
         addToCart(username);
+      } else if (response.data.EC === 0) {
+        setTongSoTien(0);
+        setDataCart([]);
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
@@ -251,7 +254,7 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
                   <Card className="bg-primary text-white rounded-3">
                     <Card.Body>
                       <div className="d-flex justify-content-between align-items-center mb-4">
-                        <h5 className="mb-0">Thông tin cá nhân</h5>
+                        {/* <h5 className="mb-0">Thông tin cá nhân</h5> */}
                         <img
                           src={`http://localhost:3003/images/${avatar || ""}`}
                           className="img-fluid rounded-3 img-fluid"
@@ -259,7 +262,7 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
                           alt="Avatar"
                         />
                       </div>
-
+                      {/* 
                       <Form className="mt-4">
                         <Form.Group className="form-outline form-white mb-4">
                           <Form.Control
@@ -290,7 +293,7 @@ const ShoppingCart = ({ handleClose, handleShow, show }) => {
                           />
                           <Form.Label>Số điện thoại</Form.Label>
                         </Form.Group>
-                      </Form>
+                      </Form> */}
 
                       <hr className="my-4" />
                       <div className="d-flex justify-content-between">

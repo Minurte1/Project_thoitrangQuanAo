@@ -8,7 +8,9 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [soLuongSanPham, setSoLuongSanPham] = useState(0);
-
+  const [maKhachHang, setMaKhachHang] = useState(null); // Thêm state cho mã khách hàng
+  const [dataCart, setDataCart] = useState([]); // Thêm state cho dữ liệu giỏ hàng
+  const [tongSoTien, setTongSoTien] = useState(null);
   const fetchSoLuongGioHang = async (username) => {
     if (username) {
       try {
@@ -37,6 +39,12 @@ export const CartProvider = ({ children }) => {
         setSoLuongSanPham,
         fetchSoLuongGioHang,
         addToCart,
+        maKhachHang, // Cung cấp mã khách hàng
+        setMaKhachHang, // Cung cấp phương thức thiết lập mã khách hàng
+        dataCart, // Cung cấp dữ liệu giỏ hàng
+        setDataCart, // Cung cấp phương thức thiết lập dữ liệu giỏ hàng
+        tongSoTien,
+        setTongSoTien,
       }}
     >
       {children}

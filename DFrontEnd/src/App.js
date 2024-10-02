@@ -24,6 +24,7 @@ import NotFoundPage from "./dashbroand/src/pages/page-not-found.jsx";
 import axios from "axios";
 
 import ForgotPasswordComponent from "./components/ComponentLogin/ForgetPassword.js";
+import MuaHangCart from "./components/componentCartShop/muahangCart.js";
 const App = () => {
   const tokenSetStorage = sessionStorage.getItem("accessToken");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -160,6 +161,7 @@ const App = () => {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/cart-mua-hang" element={<MuaHangCart />} />
           <Route
             path="/forget-password"
             element={<ForgotPasswordComponent />}

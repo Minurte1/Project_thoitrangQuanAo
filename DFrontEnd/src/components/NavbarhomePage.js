@@ -43,9 +43,10 @@ const MyNavbar = () => {
     };
 
     fetchData();
-    fetchSoLuongGioHang(username);
   }, [username, axiosWithCredentials]);
-
+  useEffect(() => {
+    fetchSoLuongGioHang(username);
+  }, [username]);
   useEffect(() => {
     if (token) {
       try {

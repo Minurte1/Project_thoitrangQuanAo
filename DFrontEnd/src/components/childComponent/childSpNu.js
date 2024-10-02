@@ -87,7 +87,7 @@ export const ChildSPNu = ({ shoes }) => {
       shoe.TENSANPHAM.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedBrand === "" || shoe.TENHANG === selectedBrand) &&
       (selectedPriceRange === "Tất cả" || checkPriceRange(shoe.GIA)) &&
-      shoe.MALOAI === 16
+      shoe.MALOAI === 18
   );
 
   const sortedShoes = [...filteredShoes].sort((a, b) => {

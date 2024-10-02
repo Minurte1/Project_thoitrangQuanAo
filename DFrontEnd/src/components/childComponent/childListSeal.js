@@ -90,7 +90,7 @@ export const ShoeListSeal = ({ shoes }) => {
       shoe.TENSANPHAM.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedBrand === "" || shoe.TENHANG === selectedBrand) &&
       (selectedPriceRange === "Tất cả" || checkPriceRange(shoe.GIA)) &&
-      shoe.MALOAI === 16
+      shoe.MALOAI === 18
   );
 
   const sortedShoes = [...filteredShoes].sort((a, b) => {
@@ -104,12 +104,11 @@ export const ShoeListSeal = ({ shoes }) => {
     }
   });
 
-  const uniqueBrands = [...new Set(shoes.data.map((shoe) => shoe.TENHANG))];
   const limitedShoes = sortedShoes.slice(0, 10);
   return (
     <div className="shoe-list shoe-listindex">
       <h2 className="tieude" id="tieude_tatcasp">
-        Sản Phẩm Quần Áo Dành Cho Nữ
+        Sản Phẩm Quần Áo Dành Cho Nữ 1
       </h2>
       <hr className="hrne"></hr>
       <ul>

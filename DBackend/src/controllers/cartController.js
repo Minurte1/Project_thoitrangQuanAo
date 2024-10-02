@@ -56,9 +56,9 @@ const getDataCartUser = async (req, res) => {
 };
 const deleteCartUser = async (req, res) => {
   const ma_gio_hang = req.body.ma_gio_hang;
-
+  const MAKHACHHANG = req.body.MAKHACHHANG;
   try {
-    let results = await deleteCart(ma_gio_hang);
+    let results = await deleteCart(ma_gio_hang, MAKHACHHANG);
 
     return res.status(200).json({
       EM: results.EM,

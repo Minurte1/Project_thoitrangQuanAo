@@ -456,7 +456,7 @@ const ModalCreateProducts = ({
             )}
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">
-                Số lượng giày
+                Số lượng quần áo
               </label>
               <input
                 onFocus={() => handleFocus("SoLuongShoe")}
