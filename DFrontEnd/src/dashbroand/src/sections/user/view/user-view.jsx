@@ -155,7 +155,7 @@ export default function UserPage() {
                   { id: "name", label: "Name" },
                   { id: "company", label: "Địa chỉ" },
                   { id: "role", label: "Mã Khách Hàng" },
-                  { id: "isVerified", label: "Số điện thoại", align: "center" },
+                  { id: "isVerified", label: "Số điện thoại" },
                   { id: "status", label: "tài khoản" },
                   { id: "" },
                 ]}

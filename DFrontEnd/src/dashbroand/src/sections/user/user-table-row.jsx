@@ -41,7 +41,7 @@ export default function UserTableRow({
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox disableRipple checked={selected} onChange={handleClick} />
+          {/* <Checkbox disableRipple checked={selected} onChange={handleClick} /> */}
         </TableCell>
 
         <TableCell component="th" scope="row" padding="none">
@@ -59,19 +59,11 @@ export default function UserTableRow({
         <TableCell>{diachi}</TableCell>
 
         <TableCell>{makhachhang}</TableCell>
-        <TableCell>{sodienthoai}</TableCell>
-        {/* <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell> */}
+        <TableCell> {sodienthoai}</TableCell>
 
         <TableCell>
-          {/* <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label> */}
           <Label>{taikhoan}</Label>
         </TableCell>
-
-        {/* <TableCell align="right">
-          <IconButton onClick={handleOpenMenu}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell> */}
       </TableRow>
 
       <Popover
