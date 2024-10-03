@@ -30,11 +30,11 @@ const navConfig = [
     path: "/orders",
     icon: icon("ic_blog"),
   },
-  {
-    title: "ChangePassword",
-    path: "/changePass",
-    icon: icon("ic_blog"),
-  },
+  // {
+  //   title: "ChangePassword",
+  //   path: "/changePass",
+  //   icon: icon("ic_blog"),
+  // },
   // {
   //   title: 'login',
   //   path: '/login',

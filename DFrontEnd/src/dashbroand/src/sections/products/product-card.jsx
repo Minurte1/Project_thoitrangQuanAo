@@ -360,13 +360,13 @@ export default function ShopProductCard({ product, callback }) {
                   </option>
                 ))}
               </select>
-              <label
+              {/* <label
                 class="input-group-text"
                 for="inputGroupSelect02"
                 onClick={CreateHangGiay}
               >
                 Thêm hãng quần áo
-              </label>
+              </label> */}
             </div>
             {/* -------------------------------THEM HANG GIAY ----------------------------------- */}
             {isOpenHangGiay ? (
@@ -381,12 +381,12 @@ export default function ShopProductCard({ product, callback }) {
                   placeholder="MWC"
                   onChange={(event) => setGetdataHangGiay(event.target.value)}
                 />
-                <button
+                {/* <button
                   className="btn btn-success"
                   onClick={XacNhanTaoHangGiay}
                 >
                   Thêm hãng quần áo
-                </button>
+                </button> */}
               </div>
             ) : (
               true
@@ -448,13 +448,13 @@ export default function ShopProductCard({ product, callback }) {
                   </option>
                 ))}
               </select>
-              <label
+              {/* <label
                 class="input-group-text"
                 for="inputGroupSelect02"
                 onClick={CreateLoaiGiay}
               >
                 Thêm Loại quần áo
-              </label>
+              </label> */}
             </div>
             {/* ------------------------------------THEM LOAI GIAY-------------------------------------- */}
             {isOpenLoaiGiay ? (
@@ -469,12 +469,12 @@ export default function ShopProductCard({ product, callback }) {
                   placeholder="Nam"
                   onChange={(event) => setGetdataLoaiGiay(event.target.value)}
                 />
-                <button
+                {/* <button
                   className="btn btn-success"
                   onClick={XacNhanTaoLoaiGiay}
                 >
                   Thêm loại quần áo
-                </button>
+                </button> */}
               </div>
             ) : (
               true
@@ -514,13 +514,13 @@ export default function ShopProductCard({ product, callback }) {
                   </option>
                 ))}
               </select>
-              <label
+              {/* <label
                 class="input-group-text"
                 for="inputGroupSelect02"
                 onClick={CreateSizeGiay}
               >
                 Thêm Size quần áo
-              </label>
+              </label> */}
             </div>
             {isOpenSizeGiay ? (
               <div class="mb-3">

@@ -60,14 +60,6 @@ const ModalCreateProducts = ({
   // Kiểm tra nếu GetdataSizeGiay không phải là một chuỗi hoặc là một chuỗi rỗng
 
   const XacNhanTaoSizeGiay = async () => {
-    if (!/^\d+$/.test(GetdataSizeGiay)) {
-      toast.error("Mày nhập khùng điên gì vậy +,@");
-      return;
-    }
-    if (GetdataSizeGiay < 10 || GetdataSizeGiay > 70) {
-      toast.error("Size trang phục thật là oải chưởng -,-");
-      return;
-    }
     try {
       const response = await axios.post(
         "http://localhost:3003/api/v1/kichco/create",
@@ -131,7 +123,7 @@ const ModalCreateProducts = ({
                 type="email"
                 class="form-control mb-2"
                 id="exampleFormControlInput1"
-                placeholder="45"
+                placeholder="Kích cỡ trang phục"
                 onChange={(event) => setGetdataSizeGiay(event.target.value)}
               />
               <button className="btn btn-success" onClick={XacNhanTaoSizeGiay}>
