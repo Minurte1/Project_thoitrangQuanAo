@@ -243,6 +243,8 @@ const muahangUser = async (req, res) => {
     const sodienthoai = req.body.phoneNumber;
     const soluong = req.body.SoluongDaMua;
     const thanhtien = req.body.Tongtien;
+    const kichCo = req.body.kichCo.GIATRI;
+    // console.log("req.body", req.body);
     const results = await buyProductpost(
       taikhoan,
       ten,
@@ -251,7 +253,8 @@ const muahangUser = async (req, res) => {
       sodienthoai,
       masp,
       soluong,
-      thanhtien
+      thanhtien,
+      kichCo
     );
     return res.status(200).json({
       EM: results.EM,

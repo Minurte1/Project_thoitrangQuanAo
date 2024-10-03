@@ -448,7 +448,8 @@ const buyProductpost = async (
   sodienthoai,
   masp,
   soluong,
-  thanhtien
+  thanhtien,
+  kichCo
 ) => {
   try {
     const currentTime = format(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -474,8 +475,8 @@ const buyProductpost = async (
         ]
       );
       const [results2, fields2] = await connection.execute(
-        `INSERT INTO chitietdonhang(madonhang,masp,soluong,thanhtien,trangthai) VALUES (?,?,?,?,'ChuaGiao')`,
-        [newIdDonhang, masp, soluong, thanhtien]
+        `INSERT INTO chitietdonhang(madonhang,masp,soluong,thanhtien,trangthai,SIZE) VALUES (?,?,?,?,'ChuaGiao',?)`,
+        [newIdDonhang, masp, soluong, thanhtien, kichCo]
       );
       return {
         EM: "Mua hàng thành công",
@@ -492,8 +493,8 @@ const buyProductpost = async (
         [newIdDonhang, newId, ten, diachi, sodienthoai, ghichu, currentTime]
       );
       const [results3, fields3] = await connection.execute(
-        `INSERT INTO chitietdonhang (madonhang,masp,soluong,thanhtien,trangthai) VALUES (?,?,?,?,'ChuaGiao')`,
-        [newIdDonhang, masp, soluong, thanhtien]
+        `INSERT INTO chitietdonhang (madonhang,masp,soluong,thanhtien,trangthai,SIZE) VALUES (?,?,?,?,'ChuaGiao',?)`,
+        [newIdDonhang, masp, soluong, thanhtien, kichCo]
       );
       return {
         EM: "Mua hàng thành công",

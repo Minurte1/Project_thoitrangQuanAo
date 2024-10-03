@@ -16,6 +16,7 @@ const {
   createLOAI,
   updateLOAI,
   deleteLOAI,
+  sizeProductServices,
 } = require("../services/apiLOAIServices");
 
 const {
@@ -398,6 +399,20 @@ const Xoasanpham = async (req, res) => {
   }
 };
 
+const getSizeProduct = async (req, res) => {
+  try {
+    const MASP = req.body.MASP;
+
+    const results = await sizeProductServices(MASP);
+    return res.status(200).json({
+      EM: results.EM,
+      EC: results.EC,
+      DT: results.DT,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   //hãng
   CapnhatHang,
@@ -425,4 +440,6 @@ module.exports = {
   Taosanpham,
   Capnhatsanpham,
   Xoasanpham,
+
+  getSizeProduct,
 };

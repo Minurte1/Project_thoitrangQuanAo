@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../assets/styles/thongtinchitietgiay.css";
 import { toast } from "react-toastify";
+import CoookieAxios from "../services/CookiesAxios";
 const ThongTinChiTietGiay = () => {
   const { state } = useLocation();
   const [counterValue, setCounterValue] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [price, setprice] = useState(null);
-
+  const [dataSize, setDataSize] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,6 +16,7 @@ const ThongTinChiTietGiay = () => {
       const GIA = parseFloat(state.GIA).toFixed(0);
       const GIASP = parseFloat(GIA);
       setprice(GIASP.toLocaleString());
+      getSizeProduct();
     }
   }, [state.GIA]);
   let handleClickMuaHang = (event) => {
@@ -27,7 +29,19 @@ const ThongTinChiTietGiay = () => {
       });
     }
   };
-
+  const getSizeProduct = async () => {
+    try {
+      const response = await CoookieAxios.get(
+        `http://localhost:3003/api/v1/kichco`
+      );
+      console.log("response.data", response.data);
+      if (response.data.EC === 1) {
+        setDataSize(response.data.DT);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleSizeClick = (size) => {
     setSelectedSize(size);
   };
@@ -65,7 +79,7 @@ const ThongTinChiTietGiay = () => {
               <p className="product-price">{price}đ</p>
               <div className="size">
                 <p className="size-p">Size</p>
-                {["37", "38", "39", "40"].map((size) => (
+                {dataSize.map((size) => (
                   <div
                     key={size}
                     className={`size-option ${
@@ -78,7 +92,7 @@ const ThongTinChiTietGiay = () => {
                         selectedSize === size ? "selected-text" : ""
                       }`}
                     >
-                      {size}
+                      {size.GIATRI}
                     </p>
                   </div>
                 ))}

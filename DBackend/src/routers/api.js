@@ -56,6 +56,7 @@ const {
   Taosanpham,
   Capnhatsanpham,
   Xoasanpham,
+  getSizeProduct,
 } = require("../controllers/ProductApiController");
 const {
   cartUser,
@@ -191,4 +192,6 @@ router.post("/cart/thanhtoan", thanhToanCartUser);
 router.post("/cart/quantity/", soLuongSPtrongGioHang);
 router.put("/user/info/update/password/be/:email", changeFogrgetPassword);
 
+//countSize Product
+router.post("/product-size", getSizeProduct);
 module.exports = router; // Di chuyển dòng này về cuối tệp của bạn
