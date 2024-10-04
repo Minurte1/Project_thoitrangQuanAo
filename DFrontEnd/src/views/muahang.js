@@ -142,7 +142,12 @@ const MuaHang = () => {
       // console.log(DIACHI);
     }
   }, [profileUser]);
+  const [paymentMethod, setPaymentMethod] = useState("tại-nhà");
 
+  // Hàm xử lý khi người dùng chọn phương thức thanh toán
+  const handlePaymentChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
   const generateRandomCustomerID = () => {
     // Lấy thời gian Unix (milliseconds)
     const randomPart = Math.floor(Math.random() * 100000);
@@ -282,30 +287,6 @@ const MuaHang = () => {
 
     fetchWards();
   }, [selectedDistrictId]); // Gọi lại useEffect khi selectedDistrictId thay đổi
-  const handleProvinceChange = (event) => {
-    const provinceId = event.target.value;
-    setSelectedProvinceId(provinceId); // Lưu ID của tỉnh được chọn vào state
-    const selectedProvinceName =
-      event.target.options[event.target.selectedIndex].text; // Lấy tên của tỉnh được chọn
-    console.log("tinh", selectedProvinceName);
-    setTinhUser(selectedProvinceName); // Lưu dữ liệu của tỉnh vào state
-  };
-
-  const handleDistrictChange = (event) => {
-    const districtId = event.target.value;
-
-    setSelectedDistrictId(districtId);
-    const selectedHuyenName =
-      event.target.options[event.target.selectedIndex].text;
-    console.log("huyen", selectedHuyenName);
-    setHuyenUser(selectedHuyenName);
-  };
-  const handleChangeXa = (event) => {
-    const selectedXaName =
-      event.target.options[event.target.selectedIndex].text;
-    console.log("xa", selectedXaName);
-    setXaUser(selectedXaName);
-  };
 
   const handleClickChecked = async () => {
     setIsChecked(!isChecked);
@@ -334,6 +315,32 @@ const MuaHang = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
+    }
+  };
+  const [NewBooking, setNewBooking] = useState();
+  const changePayment = async () => {
+    const value = 1;
+    try {
+      // Gọi API để tạo đơn hàng VNPay
+      const response = await axios.post(
+        "https://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder",
+        {
+          paymentMethod: parseInt(value), // Chuyển giá trị thành số nguyên
+          vnp_OrderInfo: "Thông tin đơn hàng", // Cung cấp thông tin mô tả về đơn hàng
+          vnp_IpAddr: "http://localhost:3000", // Địa chỉ IP công khai của server
+          // Các tham số khác cần thiết cho yêu cầu VNPay
+        }
+      );
+      console.log(response.data);
+      // Kiểm tra phản hồi từ API
+      if (response.data && response.data.url) {
+        // Mở liên kết thanh toán VNPay
+        window.open(response.data.url);
+      } else {
+        console.error("Không có URL thanh toán trong phản hồi:", response.data);
+      }
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi gọi API thanh toán:", error);
     }
   };
   if (Loading) {
@@ -375,62 +382,6 @@ const MuaHang = () => {
                 />
               </label>
               {/* --------START-----API-------------------------- */}
-              {/* <div className="container-tinhthanhvietnam">
-                <select
-                  className="tinhthanh"
-                  name="province"
-                  onChange={handleProvinceChange}
-                  value={TinhUser}
-                >
-                  <option value={TinhUser}>
-                    {" "}
-                    {TinhUser ? TinhUser : "Chọn tỉnh"}
-                  </option>
-                  {provinces.map((province) => (
-                    <option
-                      key={province.province_id}
-                      value={province.province_id}
-                    >
-                      {province.province_name}
-                    </option>
-                  ))}
-                </select>{" "}
-                <br />
-                <select
-                  name="district"
-                  className="tinhthanh"
-                  onChange={handleDistrictChange}
-                  value={HuyenUser}
-                >
-                  <option value={HuyenUser}>
-                    {HuyenUser ? HuyenUser : "Chọn huyện"}
-                  </option>
-                  {Array.isArray(districts) &&
-                    districts.map((district) => (
-                      <option
-                        key={district.district_id}
-                        value={district.district_id}
-                      >
-                        {district.district_name}
-                      </option>
-                    ))}
-                </select>{" "}
-                <br />
-                <select
-                  className="tinhthanh"
-                  name="ward"
-                  value={XaUser}
-                  onChange={handleChangeXa}
-                >
-                  <option value={XaUser}>{XaUser ? XaUser : "Chọn xã"}</option>
-                  {Array.isArray(wards) &&
-                    wards.map((ward) => (
-                      <option key={ward.ward_id} value={ward.ward_id}>
-                        {ward.ward_name}
-                      </option>
-                    ))}
-                </select>
-              </div> */}
               {/* --------END-----API---------------------------- */}
               <div class="mb-12">
                 <input
@@ -486,7 +437,16 @@ const MuaHang = () => {
                   placeholder="Ghi chú"
                 />
               </label>
-              <p className="thanhtoan">Hình thức thanh toán tại nhà</p>
+              <div>
+                <select
+                  className="muahang-input thanh-toan marginlert"
+                  value={paymentMethod}
+                  onChange={handlePaymentChange}
+                >
+                  <option value="tại-nhà">Thanh toán tại nhà</option>
+                  <option value="trực-tuyến">Tính tiền trực tuyến</option>
+                </select>
+              </div>
               {IsOpenContractCustomer && (
                 <div className="form-muahang-hoso">
                   <p>Bạn có muốn sử dụng thông tin trong hồ sơ để mua hàng?</p>{" "}
@@ -545,16 +505,34 @@ const MuaHang = () => {
                 <span>Tổng cộng</span>
                 <span className="muahang-tongcong1">{TienHienThi}đ</span>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  handleOrder();
-                  generateRandomCustomerID();
-                }}
-                className="muahang-button"
-              >
-                Đặt Hàng
-              </button>
+
+              {paymentMethod === "tại-nhà" ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleOrder();
+                      generateRandomCustomerID();
+                    }}
+                    className="muahang-button"
+                  >
+                    Thanh toán tại nhà
+                  </button>{" "}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      changePayment();
+                    }}
+                    className="muahang-button"
+                  >
+                    Thanh toán trực tuyến
+                  </button>{" "}
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -135,6 +135,7 @@ const updateSANPHAM = async (
   soluong,
   thongtin
 ) => {
+  console.log("hanggiay", hanggiay);
   try {
     const [results, fields] = await connection.execute(
       `select * from sanpham where masp= ?`,
