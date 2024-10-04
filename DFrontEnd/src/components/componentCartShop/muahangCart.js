@@ -191,7 +191,7 @@ const MuaHangCart = () => {
       toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại."); // Hiển thị thông báo nếu dữ liệu rỗng
       return; // Không mở cửa sổ mới
     }
-
+    handleThanhToan();
     // Nếu dữ liệu hợp lệ, mở cửa sổ mới
     window.open(
       "https://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder",

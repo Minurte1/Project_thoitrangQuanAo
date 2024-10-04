@@ -448,7 +448,7 @@ const ModalCreateProducts = ({
                   className="btn btn-success"
                   onClick={XacNhanTaoSizeGiay}
                 >
-                  Thêm size giày
+                  Thêm size thời trang
                 </button>
               </div>
             ) : (

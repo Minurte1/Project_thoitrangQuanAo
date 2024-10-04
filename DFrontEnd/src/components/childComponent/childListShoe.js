@@ -96,7 +96,7 @@ export const ShoeList = ({ shoes }) => {
   }
 
   try {
-    // Lọc danh sách giày nam và giày nữ từ dữ liệu shoes.data
+    // Lọc danh sách thời trang nam và thời trang nữ từ dữ liệu shoes.data
     const maleShoes = shoes.data
       .filter((shoe) => String(shoe.MALOAI) === "18")
       .slice(0, 5);
@@ -104,7 +104,7 @@ export const ShoeList = ({ shoes }) => {
       .filter((shoe) => String(shoe.MALOAI) === "19")
       .slice(0, 5);
 
-    // Kết hợp danh sách giày nam và giày nữ
+    // Kết hợp danh sách thời trang nam và thời trang nữ
     const combinedShoes = [...maleShoes, ...femaleShoes];
 
     return (

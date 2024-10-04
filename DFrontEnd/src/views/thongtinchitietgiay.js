@@ -21,7 +21,7 @@ const ThongTinChiTietGiay = () => {
   }, [state.GIA]);
   let handleClickMuaHang = (event) => {
     if (selectedSize == null) {
-      toast.error("Vui lòng chọn Size giày");
+      toast.error("Vui lòng chọn Size thời trang");
       event.preventDefault();
     } else {
       navigate(`/muahang/${state.MASP}`, {

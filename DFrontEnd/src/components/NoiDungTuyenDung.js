@@ -11,7 +11,7 @@ function NoiDungTuyenDung() {
 
       <p> Ngày đăng: 07/12/2023</p>
 
-      <h4>Chào các bạn yêu giày,</h4>
+      <h4>Chào các bạn yêu thời trang,</h4>
       <p>
         <span className="logotuyendung">Quần Áo</span>, một thương hiệu giày nổi
         tiếng và đang phát triển mạnh mẽ, hiện đang mở cửa để chào đón các bạn

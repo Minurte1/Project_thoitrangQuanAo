@@ -8,7 +8,7 @@ const ThongTinChiTietGiaySeal = () => {
   const navigate = useNavigate();
   let handleClickMuaHang = (event) => {
     if (selectedSize == null) {
-      alert("Vui lòng chọn Size giày");
+      alert("Vui lòng chọn Size thời trang");
       event.preventDefault();
     } else {
       navigate(`/muahang/${state.id}`, {

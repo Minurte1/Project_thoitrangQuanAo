@@ -264,7 +264,8 @@ const MuaHang = () => {
       toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại."); // Hiển thị thông báo nếu dữ liệu rỗng
       return; // Không mở cửa sổ mới
     }
-
+    handleOrder();
+    generateRandomCustomerID();
     // Nếu dữ liệu hợp lệ, mở cửa sổ mới
     window.open(
       "https://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder",
@@ -376,7 +377,7 @@ const MuaHang = () => {
                 </select>
               </div>
               {IsOpenContractCustomer && (
-                <div className="form-muahang-hoso">
+                <div className="form-muahang-hoso mt-2">
                   <p>Bạn có muốn sử dụng thông tin trong hồ sơ để mua hàng?</p>{" "}
                   <div class="form-check">
                     <label class="form-check-label">Hãy bật tắt nó</label>
