@@ -97,10 +97,25 @@ const MuaHangCart = () => {
     // Số ngẫu nhiên từ 0 đến 999
     return randomPart;
   };
-
+  const [paymentMethod, setPaymentMethod] = useState("tại-nhà");
   const [customerID, setCustomerID] = useState(generateRandomCustomerID());
 
   const handleThanhToan = async () => {
+    // Kiểm tra dữ liệu đầu vào
+    if (
+      !maKhachHang ||
+      !name ||
+      !DiachiUsertoBack ||
+      !phoneNumber ||
+      !dataCart ||
+      dataCart.length === 0
+    ) {
+      toast.error(
+        "Vui lòng điền đầy đủ thông tin và có sản phẩm trong giỏ hàng."
+      ); // Hiển thị thông báo lỗi
+      return; // Dừng lại nếu dữ liệu không hợp lệ
+    }
+
     try {
       const response = await CookiesAxios.post(
         `http://localhost:3003/api/v1/cart/thanhtoan`,
@@ -119,6 +134,7 @@ const MuaHangCart = () => {
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
+      toast.error("Đã xảy ra lỗi, vui lòng thử lại."); // Thông báo lỗi nếu có sự cố
     }
   };
 
@@ -163,6 +179,27 @@ const MuaHangCart = () => {
       console.error("Error fetching data:", error);
     } finally {
     }
+  };
+  const handlePayment = () => {
+    // Kiểm tra dữ liệu
+    if (
+      !name ||
+      !DiachiUsertoBack ||
+      !phoneNumber ||
+      phoneNumber.length !== 10
+    ) {
+      toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại."); // Hiển thị thông báo nếu dữ liệu rỗng
+      return; // Không mở cửa sổ mới
+    }
+
+    // Nếu dữ liệu hợp lệ, mở cửa sổ mới
+    window.open(
+      "https://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder",
+      "_blank"
+    );
+  };
+  const handlePaymentChange = (event) => {
+    setPaymentMethod(event.target.value);
   };
   if (Loading) {
     return <LoadingComponent />;
@@ -257,9 +294,18 @@ const MuaHangCart = () => {
                   placeholder="Ghi chú"
                 />
               </label>
-              <p className="thanhtoan">Hình thức thanh toán tại nhà</p>
+              <div>
+                <select
+                  className="muahang-input thanh-toan marginlert"
+                  value={paymentMethod}
+                  onChange={handlePaymentChange}
+                >
+                  <option value="tại-nhà">Thanh toán tại nhà</option>
+                  <option value="trực-tuyến">Tính tiền trực tuyến</option>
+                </select>
+              </div>
               {IsOpenContractCustomer && (
-                <div className="form-muahang-hoso">
+                <div className="form-muahang-hoso mt-2">
                   <p>Bạn có muốn sử dụng thông tin trong hồ sơ để mua hàng?</p>{" "}
                   <div class="form-check">
                     <label class="form-check-label">Hãy bật tắt nó</label>
@@ -308,29 +354,37 @@ const MuaHangCart = () => {
                 />
                 <button className="muahang-xacnhan">Sử Dụng</button>
               </label>
-              {/* <hr /> */}
-              {/* <div className="muahang-tamtinh">
-                <span className="muahang-tamtinh1">Tạm tính</span>
-                <span className="muahang-tamtinh3">{price1}đ</span>
-              </div> */}
-              <div className="muahang-phivanchuyen">
-                {/* <span>Phí vận chuyển</span> */}
-                {/* <span className="muahang-phivanchuyen1">30,000đ</span> */}
-              </div>
+
+              <div className="muahang-phivanchuyen"></div>
               <hr />
               <div className="muahang-tongcong">
                 <span>Tổng cộng</span>
                 <span className="muahang-tongcong1">{tongSoTien}đ</span>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  handleThanhToan();
-                }}
-                className="muahang-button"
-              >
-                Đặt Hàng
-              </button>
+              {paymentMethod === "tại-nhà" ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleThanhToan();
+                    }}
+                    className="muahang-button"
+                  >
+                    Thanh toán tại nhà
+                  </button>{" "}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <a
+                    type="button"
+                    className="muahang-button thanhtoan-onlne"
+                    onClick={handlePayment} // Gọi hàm kiểm tra và mở cửa sổ
+                  >
+                    Thanh toán trực tuyến
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -683,3 +683,10 @@ hr {
     margin-left: 10%;
     margin-top: 4px;
 }
+
+.thanhtoan-onlne {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

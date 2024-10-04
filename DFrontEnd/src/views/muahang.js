@@ -63,11 +63,6 @@ const MuaHang = () => {
     }
   }, [giay, soLuong]);
 
-  const [provinces, setProvinces] = useState([]);
-  const [selectedProvinceId, setSelectedProvinceId] = useState(null); // Lưu trữ ID của tỉnh được chọn
-  const [districts, setDistricts] = useState([]);
-  const [selectedDistrictId, setSelectedDistrictId] = useState(null); // Lưu trữ ID của huyện được chọn
-  const [wards, setWards] = useState([]);
   const [TinhUser, setTinhUser] = useState(null);
   const [HuyenUser, setHuyenUser] = useState(null);
   const [XaUser, setXaUser] = useState(null);
@@ -219,26 +214,6 @@ const MuaHang = () => {
   // ----------------------------------------API tỉnh thành ----------------------------------------
 
   useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const response = await axios.get(
-          "https://vapi.vnappmob.com/api/province/"
-        );
-        const data = response.data.results;
-
-        // Xử lý dữ liệu nếu nó là một đối tượng
-        // const provincesArray = Object.values(data);
-        setProvinces(Array.isArray(data) ? data : []);
-        // console.log(data);
-      } catch (error) {
-        console.error("Error fetching provinces:", error);
-      }
-    };
-
-    fetchProvinces();
-  }, []);
-
-  useEffect(() => {
     // Kiểm tra xem tất cả các biến đã được thiết lập hay chưa
     if (TinhUser !== null && HuyenUser !== null && XaUser !== null) {
       console.log("oke !!");
@@ -248,45 +223,6 @@ const MuaHang = () => {
       );
     }
   }, [TinhUser, HuyenUser, XaUser]);
-
-  useEffect(() => {
-    if (selectedProvinceId !== null && selectedProvinceId !== undefined) {
-      const fetchDistricts = async () => {
-        try {
-          const response = await axios.get(
-            `https://vapi.vnappmob.com/api/province/district/${selectedProvinceId}`
-          );
-          const data = response.data;
-          setDistricts(data.results);
-          // console.log(data.results);
-        } catch (error) {
-          console.error("Error fetching districts:", error);
-        }
-      };
-
-      fetchDistricts();
-    }
-  }, [selectedProvinceId]);
-
-  useEffect(() => {
-    const fetchWards = async () => {
-      try {
-        // Chỉ gửi yêu cầu khi có ID của huyện được chọn
-        if (selectedDistrictId !== null && selectedDistrictId !== undefined) {
-          const response = await axios.get(
-            `https://vapi.vnappmob.com/api/province/ward/${selectedDistrictId}`
-          );
-          const data = response.data;
-          setWards(data.results);
-          // console.log(data.results);
-        }
-      } catch (error) {
-        console.error("Error fetching wards:", error);
-      }
-    };
-
-    fetchWards();
-  }, [selectedDistrictId]); // Gọi lại useEffect khi selectedDistrictId thay đổi
 
   const handleClickChecked = async () => {
     setIsChecked(!isChecked);
@@ -317,31 +253,23 @@ const MuaHang = () => {
     } finally {
     }
   };
-  const [NewBooking, setNewBooking] = useState();
-  const changePayment = async () => {
-    const value = 1;
-    try {
-      // Gọi API để tạo đơn hàng VNPay
-      const response = await axios.post(
-        "https://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder",
-        {
-          paymentMethod: parseInt(value), // Chuyển giá trị thành số nguyên
-          vnp_OrderInfo: "Thông tin đơn hàng", // Cung cấp thông tin mô tả về đơn hàng
-          vnp_IpAddr: "http://localhost:3000", // Địa chỉ IP công khai của server
-          // Các tham số khác cần thiết cho yêu cầu VNPay
-        }
-      );
-      console.log(response.data);
-      // Kiểm tra phản hồi từ API
-      if (response.data && response.data.url) {
-        // Mở liên kết thanh toán VNPay
-        window.open(response.data.url);
-      } else {
-        console.error("Không có URL thanh toán trong phản hồi:", response.data);
-      }
-    } catch (error) {
-      console.error("Có lỗi xảy ra khi gọi API thanh toán:", error);
+  const handlePayment = () => {
+    // Kiểm tra dữ liệu
+    if (
+      !name ||
+      !DiachiUsertoBack ||
+      !phoneNumber ||
+      phoneNumber.length !== 10
+    ) {
+      toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại."); // Hiển thị thông báo nếu dữ liệu rỗng
+      return; // Không mở cửa sổ mới
     }
+
+    // Nếu dữ liệu hợp lệ, mở cửa sổ mới
+    window.open(
+      "https://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder",
+      "_blank"
+    );
   };
   if (Loading) {
     return <LoadingComponent />;
@@ -522,15 +450,13 @@ const MuaHang = () => {
               ) : (
                 <>
                   {" "}
-                  <button
+                  <a
                     type="button"
-                    onClick={() => {
-                      changePayment();
-                    }}
-                    className="muahang-button"
+                    className="muahang-button thanhtoan-onlne"
+                    onClick={handlePayment} // Gọi hàm kiểm tra và mở cửa sổ
                   >
                     Thanh toán trực tuyến
-                  </button>{" "}
+                  </a>
                 </>
               )}
             </div>
