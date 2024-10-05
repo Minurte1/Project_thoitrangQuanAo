@@ -294,13 +294,13 @@ const ModalCreateProducts = ({
                 ))}
               </select>
 
-              <label
+              {/* <label
                 class="input-group-text"
                 for="inputGroupSelect02"
                 onClick={CreateHangGiay}
               >
                 Thêm hãng quần áo
-              </label>
+              </label> */}
             </div>
             {/* -------------------------------THEM HANG GIAY ----------------------------------- */}
             {isOpenHangGiay ? (
@@ -375,13 +375,13 @@ const ModalCreateProducts = ({
                   </option>
                 ))}
               </select>
-              <label
+              {/* <label
                 class="input-group-text"
                 for="inputGroupSelect02"
                 onClick={CreateLoaiGiay}
               >
                 Thêm Loại Quần Áo
-              </label>
+              </label> */}
             </div>
             {/* ------------------------------------THEM LOAI GIAY-------------------------------------- */}
             {isOpenLoaiGiay ? (
@@ -424,13 +424,13 @@ const ModalCreateProducts = ({
                   </option>
                 ))}
               </select>
-              <label
+              {/* <label
                 class="input-group-text"
                 for="inputGroupSelect02"
                 onClick={CreateSizeGiay}
               >
                 Thêm Size Quần Áo
-              </label>
+              </label> */}
             </div>
             {isOpenSizeGiay ? (
               <div class="mb-3">
