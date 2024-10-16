@@ -8,13 +8,11 @@ const path = require("path");
 const port = process.env.PORT;
 
 const configViewEngine = require("./config/viewEngine");
-const webRouter = require("./routers/web.js");
-const connection = require("./config/database");
 
+require("./config/old.js");
 const bodyParser = require("body-parser");
 const apiRoute = require("../src/routers/api.js");
-const apiFront = require("../src/routers/apiFront.js");
-const checkUserJWT = require("../src/middleware/JWTaction.js");
+
 const cookieParser = require("cookie-parser");
 
 const hostname = process.env.HOST_NAME || "0.0.0.0";
@@ -33,11 +31,9 @@ app.use(bodyParser.json());
 app.use("/helloworld", (req, res) => {
   res.send("hellowork");
 });
-app.use("/api/v1", apiFront);
+
 app.use("/api/v1/", apiRoute);
 configViewEngine(app);
-
-app.use(webRouter);
 
 //express default
 app.listen(port, hostname, () => {

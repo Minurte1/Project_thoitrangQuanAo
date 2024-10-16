@@ -1,0 +1,46 @@
+.custom-modal .modal-content {
+    border: none;
+    /* Ẩn viền */
+    border-radius: 0;
+    /* Bỏ góc bo nếu muốn */
+}
+
+.custom-modal .modal {
+    background-color: transparent;
+    /* Đặt nền của modal thành trong suốt */
+
+}
+
+.div-cart {
+
+    background-color: white;
+
+}
+
+.custom-modal {
+
+    position: fixed;
+    /* Đặt modal ở vị trí cố định */
+    top: 0;
+    /* Đặt ở trên cùng */
+    right: 0;
+    /* Đặt ở bên phải */
+    height: 100vh;
+    /* Chiều cao của modal */
+
+    /* Độ rộng của modal */
+    transform: translateX(10%);
+    /* Đẩy modal ra ngoài màn hình */
+    transition: transform 0.3s ease;
+    /* Hiệu ứng chuyển động */
+}
+
+.custom-modal.show {
+    transform: translateX(0);
+    /* Đưa modal về vị trí bình thường */
+}
+
+.cart-item-gia {
+    font-size: 15px;
+
+}

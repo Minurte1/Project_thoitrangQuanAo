@@ -3,6 +3,7 @@ const connection = require("../config/old.js");
 const getHANG = async () => {
   try {
     const [results, fields] = await connection.execute("SELECT * FROM `hang`");
+    console.log(results);
     return {
       EM: "xem thoong tin thanh cong",
       EC: 1,
