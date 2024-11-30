@@ -38,7 +38,7 @@ def fetch_products(db):
 
 # Xây dựng ma trận similarity dựa trên TF-IDF
 def build_similarity_matrix(products):
-    products['combined_features'] = products['TENSANPHAM'] + " " + products['description'].fillna("")
+    products['combined_features'] = products['TENSANPHAM'] + " " + products['THONGTINSANPHAM'].fillna("")
     tfidf = TfidfVectorizer(stop_words="english")
     tfidf_matrix = tfidf.fit_transform(products['combined_features'])
     similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)    
