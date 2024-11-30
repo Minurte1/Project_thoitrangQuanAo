@@ -14,6 +14,8 @@ const Login = () => {
   const [PasswordRegister, setPasswordRegister] = useState("");
   const [RePasswordRegister, setRePasswordRegister] = useState("");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [loginAttempts, setLoginAttempts] = useState(0); // Số lần đăng nhập sai
+  const MAX_ATTEMPTS = 5; // Giới hạn số lần đăng nhập sai
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -62,12 +64,9 @@ const Login = () => {
       // Kiểm tra điều kiện đăng nhập
       if (!UsernameLogin || !PasswordLogin) {
         toast.error("Vui lòng điền đầy đủ thông tin đăng nhập");
-        return; // Thoát khỏi hàm nếu điều kiện không đúng
+        return;
       }
-      // if (!emailRegex.test(UsernameRegister)) {
-      //   toast.error("Vui lòng nhập đúng cú pháp email");
-      //   return; // Thoát khỏi hàm nếu điều kiện không đúng
-      // }
+
       setIsActive(false);
 
       // Gửi yêu cầu đăng nhập
@@ -79,10 +78,24 @@ const Login = () => {
       // Xử lý phản hồi từ máy chủ
       if (response.data.EC === 1) {
         sessionStorage.setItem("accessToken", response.data.DT.access_token);
-        toast.success("Đăng nhập thành công");
+        toast.success(response.data.EM);
+        setLoginAttempts(0); // Reset số lần đăng nhập sai
         navigate(`/`);
       } else {
-        toast.error("Đăng nhập thất bại");
+        toast.error(response.data.EM);
+        const newAttempts = loginAttempts + 1;
+        setLoginAttempts(newAttempts);
+
+        if (newAttempts >= MAX_ATTEMPTS) {
+          // Gọi API cập nhật GHICHU thành "Ngưng hoạt động"
+          await axios.post("http://localhost:3003/api/v1/update-ghichu-login", {
+            username: UsernameLogin,
+            GHICHU: "Ngưng hoạt động",
+          });
+          toast.error(
+            "Tài khoản đã bị khóa do đăng nhập sai quá nhiều lần. Vui lòng liên hệ hỗ trợ."
+          );
+        }
       }
     } catch (error) {
       console.error("Error during login:", error);

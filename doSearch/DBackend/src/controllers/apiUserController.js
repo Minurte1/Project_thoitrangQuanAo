@@ -287,6 +287,124 @@ const countUsers = async (req, res) => {
     });
   }
 };
+
+// API cập nhật GHICHU
+const updateTrangThaiTaiKhoan = async (req, res) => {
+  const { MAKHACHHANG, GHICHU } = req.body;
+
+  if (!MAKHACHHANG || !GHICHU) {
+    return res.status(400).json({
+      EM: "Thiếu thông tin MAKHACHHANG hoặc GHICHU",
+      EC: 0,
+      DT: [],
+    });
+  }
+
+  try {
+    // Kiểm tra sự tồn tại của khách hàng
+    const [existingCustomer] = await connection.execute(
+      "SELECT * FROM `khachhang` WHERE `MAKHACHHANG` = ?",
+      [MAKHACHHANG]
+    );
+
+    if (existingCustomer.length === 0) {
+      return res.status(404).json({
+        EM: "Khách hàng không tồn tại",
+        EC: 0,
+        DT: [],
+      });
+    }
+
+    // Cập nhật GHICHU
+    const [updateResult] = await connection.execute(
+      "UPDATE `khachhang` SET `GHICHU` = ? WHERE `MAKHACHHANG` = ?",
+      [GHICHU, MAKHACHHANG]
+    );
+
+    if (updateResult.affectedRows > 0) {
+      return res.status(200).json({
+        EM: "Cập nhật ghi chú thành công",
+        EC: 1,
+        DT: {
+          MAKHACHHANG,
+          GHICHU,
+        },
+      });
+    } else {
+      return res.status(500).json({
+        EM: "Cập nhật ghi chú thất bại",
+        EC: 0,
+        DT: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error in update-ghichu:", error);
+    return res.status(500).json({
+      EM: "Lỗi hệ thống, vui lòng thử lại sau",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
+const updateTrangThaiTaiKhoan_Login = async (req, res) => {
+  const { username, GHICHU } = req.body;
+
+  if (!username || !GHICHU) {
+    return res.status(400).json({
+      EM: "Thiếu thông tin MAKHACHHANG hoặc GHICHU",
+      EC: 0,
+      DT: [],
+    });
+  }
+
+  try {
+    // Kiểm tra sự tồn tại của khách hàng
+    const [existingCustomer] = await connection.execute(
+      "SELECT * FROM `users` WHERE `taikhoan` = ?",
+      [username]
+    );
+
+    if (existingCustomer.length === 0) {
+      return res.status(404).json({
+        EM: "Khách hàng không tồn tại",
+        EC: 0,
+        DT: [],
+      });
+    }
+
+    // Cập nhật GHICHU
+    const [updateResult] = await connection.execute(
+      "UPDATE `khachhang` SET `GHICHU` = ? WHERE `taikhoan` = ?",
+      [GHICHU, username]
+    );
+
+    if (updateResult.affectedRows > 0) {
+      return res.status(200).json({
+        EM: "Tài khoản đã bị khóa",
+        EC: 1,
+        DT: {
+          username,
+          GHICHU,
+        },
+      });
+    } else {
+      return res.status(500).json({
+        EM: "Tài khoản đã bị khóa",
+        EC: 0,
+        DT: [],
+      });
+    }
+  } catch (error) {
+    console.error("Error in update-ghichu:", error);
+    return res.status(500).json({
+      EM: "Lỗi hệ thống, vui lòng thử lại sau",
+      EC: -1,
+      DT: [],
+    });
+  }
+};
+
 module.exports = {
   CreateUser,
   getAllUser,
@@ -303,4 +421,6 @@ module.exports = {
   countUsers,
   CapnhatAdmin,
   getDataUser,
+  updateTrangThaiTaiKhoan,
+  updateTrangThaiTaiKhoan_Login,
 };

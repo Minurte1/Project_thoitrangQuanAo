@@ -21,12 +21,20 @@ def connect_database():
 
 # Lấy dữ liệu từ bảng sản phẩm
 def fetch_products(db):
-    query = "SELECT MASP, TENSANPHAM, description, MALOAI FROM sanpham"
+    query = """
+    SELECT MASP, TENSANPHAM, MAHANG, GIA, giamgia, description, 
+           MALOAI, MAGIATRI, SOLUONG, THONGTINSANPHAM 
+    FROM sanpham
+    """
     cursor = db.cursor()
     cursor.execute(query)
     results = cursor.fetchall()
-    products = pd.DataFrame(results, columns=["MASP", "TENSANPHAM", "description", "MALOAI"])
+    products = pd.DataFrame(results, columns=[
+        "MASP", "TENSANPHAM", "MAHANG", "GIA", "giamgia", 
+        "description", "MALOAI", "MAGIATRI", "SOLUONG", "THONGTINSANPHAM"
+    ])
     return products
+
 
 # Xây dựng ma trận similarity dựa trên TF-IDF
 def build_similarity_matrix(products):
@@ -46,17 +54,16 @@ def recommend_products(input_product, products, similarity_matrix, top_n=5):
     sim_scores = list(enumerate(similarity_matrix[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     recommended_indices = [i[0] for i in sim_scores[1:top_n+1]]
-    recommendations = products.iloc[recommended_indices][["MASP", "TENSANPHAM"]].to_dict(orient="records")
-    print(recommendations)
+    # Trả về tất cả các cột
+    recommendations = products.iloc[recommended_indices].to_dict(orient="records")
     return recommendations
+
 
 # Endpoint API để gợi ý sản phẩm
 @app.route('/recommend', methods=['POST'])
 def recommend():
     try:
-        # Kiểm tra dữ liệu đầu vào
         data = request.json
-        print(data)
         if not data:
             return jsonify({"error": "Request không chứa dữ liệu JSON"}), 400
         
@@ -69,34 +76,29 @@ def recommend():
         
         # Lấy dữ liệu sản phẩm từ cơ sở dữ liệu
         products = fetch_products(db)
-        print(products)
         
         # Xây dựng ma trận similarity
         similarity_matrix = build_similarity_matrix(products)
         
         # Gợi ý sản phẩm dựa trên tên sản phẩm nhập vào
         recommendations = recommend_products(input_product, products, similarity_matrix, top_n=5)
-        print(recommendations)
         
         if not recommendations:
             return jsonify({"error": "Không tìm thấy sản phẩm phù hợp."}), 404
         
-        # Trả về kết quả với ensure_ascii=False để giữ nguyên ký tự đặc biệt
+        # Trả về kết quả
         response = jsonify({
             "input_product": input_product,
             "recommendations": recommendations
         })
-        
-        # Set lại header để trả về với UTF-8 (Flask sẽ tự động xử lý mã hóa này)
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
-        
-        # Giữ nguyên các ký tự đặc biệt
         response.data = json.dumps(response.get_json(), ensure_ascii=False).encode('utf-8')
         
         return response
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

@@ -98,10 +98,25 @@ const checktaikhoan = async (taikhoan) => {
 const postLoginUser = async (taikhoan, password) => {
   try {
     const [results, fields] = await connection.execute(
-      "SELECT * FROM `users` where `taikhoan` = ?",
+      "SELECT * FROM `users` WHERE `taikhoan` = ?",
       [taikhoan]
     );
+    console.log("results[0].taikhoan", results[0].taikhoan);
     if (results.length > 0) {
+      const [results_KhangHang, fields] = await connection.execute(
+        "SELECT * FROM `khachhang` WHERE `taikhoan` = ?",
+        [results[0].taikhoan]
+      );
+      console.log("results_KhangHang", results_KhangHang);
+      if (results_KhangHang[0].GHICHU === "Ngưng hoạt động") {
+        return {
+          EM: "Tài khoản đã bị ngưng hoạt động",
+          EC: 0,
+          DT: [],
+        };
+      }
+
+      // So sánh mật khẩu
       const isCorrectPass = await bcrypt.compare(password, results[0].matkhau);
       if (isCorrectPass) {
         let payload = {
@@ -109,6 +124,7 @@ const postLoginUser = async (taikhoan, password) => {
           matkhau: results[0].matkhau,
         };
         let token = createJWT(payload);
+
         return {
           EM: "Đăng nhập thành công",
           EC: 1,
@@ -133,7 +149,11 @@ const postLoginUser = async (taikhoan, password) => {
     }
   } catch (error) {
     console.error("Error in postLoginUser:", error);
-    throw error;
+    return {
+      EM: "Lỗi hệ thống, vui lòng thử lại sau",
+      EC: -1,
+      DT: [],
+    };
   }
 };
 

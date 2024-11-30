@@ -118,6 +118,12 @@ const MyNavbar = () => {
     }
   };
 
+  const handleClick = (product) => {
+    setRecommendations([]);
+    navigate(`/thongtinchitietgiay/${product.MASP}`, { state: product });
+  };
+
+  console.log("recommendations", recommendations);
   return (
     <>
       {" "}
@@ -127,8 +133,12 @@ const MyNavbar = () => {
             <a className="image-navbar" href="/">
               QuanAo
             </a>
-            <div className="ml-autoo">
-              <a href="/" className="nav-item nav-item1">
+            <div className="ml-autoo" style={{ marginLeft: "13%" }}>
+              <a
+                href="/"
+                className="nav-item nav-item1"
+                style={{ width: "100px" }}
+              >
                 Giới Thiệu
               </a>
               <a href="/nu-sanpham" className="nav-item nav-item1">
@@ -140,27 +150,36 @@ const MyNavbar = () => {
               <a href="/tatca-sanpham" className="nav-item nav-item4">
                 Tất Cả
               </a>{" "}
-              <div className="search-container">
-                <input
-                  type="text"
-                  value={productName}
-                  onChange={handleInputChange} // Gọi hàm handleInputChange mỗi khi giá trị thay đổi
-                  placeholder="Enter product name (e.g., giày)"
-                  className="search-input"
-                />
-                {/* Hiển thị gợi ý sản phẩm nếu có */}
-                <ul className="recommendations-list">
-                  {recommendations.length > 0 ? (
-                    recommendations.map((product, index) => (
-                      <li key={index} className="recommendation-item">
-                        {product.TENSANPHAM}
-                      </li>
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                </ul>
-              </div>
+            </div>{" "}
+            <div className="search-container " style={{ marginRight: "10%" }}>
+              <input
+                type="text"
+                value={productName}
+                onChange={handleInputChange} // Gọi hàm handleInputChange mỗi khi giá trị thay đổi
+                placeholder="Tìm kiếm giày.."
+                className="search-input"
+              />
+              {/* Hiển thị gợi ý sản phẩm nếu có */}
+              <ul className="recommendations-list">
+                {recommendations.length > 0 ? (
+                  recommendations.map((product, index) => (
+                    <li
+                      key={index}
+                      className="recommendation-item"
+                      onClick={() => handleClick(product)}
+                      style={{
+                        cursor: "pointer",
+                        padding: "8px",
+                        borderBottom: "1px solid #ccc",
+                      }}
+                    >
+                      {product.TENSANPHAM}
+                    </li>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </ul>
             </div>
             <div className="cart-divv">
               {isAuthenticated ? (

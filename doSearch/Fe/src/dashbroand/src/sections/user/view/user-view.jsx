@@ -47,19 +47,6 @@ export default function UserPage() {
 
   const [DataAllUserBackend, setDataAllUserBackend] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const AllUser = await axiosWithCredentials.get(
-          "http://localhost:3003/api/v1/user"
-        );
-        setDataAllUserBackend(AllUser.data.DT);
-
-        console.log("=>user", AllUser.data.DT);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
   const handleSort = (event, id) => {
@@ -69,7 +56,18 @@ export default function UserPage() {
       setOrderBy(id);
     }
   };
+  const fetchData = async () => {
+    try {
+      const AllUser = await axiosWithCredentials.get(
+        "http://localhost:3003/api/v1/user"
+      );
+      setDataAllUserBackend(AllUser.data.DT);
 
+      console.log("=>user", AllUser.data.DT);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = users.map((n) => n.name);
@@ -157,6 +155,7 @@ export default function UserPage() {
                   { id: "role", label: "Mã Khách Hàng" },
                   { id: "isVerified", label: "Số điện thoại" },
                   { id: "status", label: "tài khoản" },
+                  { id: "ghichu", label: "trạng thái" },
                   { id: "" },
                 ]}
               />
@@ -172,6 +171,8 @@ export default function UserPage() {
                       sodienthoai={row.sodienthoai}
                       diachi={row.diachi}
                       avatarUrl={row.avatar}
+                      ghichu={row.ghichu}
+                      fetchData={fetchData}
                       isVerified={row.isVerified}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}

@@ -14,12 +14,13 @@
 }
 
 .search-container {
+    width: 250px;
     position: relative;
     /* Để gợi ý sản phẩm được đặt dưới thanh tìm kiếm */
 }
 
 .search-input {
-    width: 100%;
+    width: 250px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -63,6 +64,7 @@
     width: 100%;
     height: auto;
     margin-left: -1%;
+
 }
 
 .isOpen {
@@ -71,6 +73,7 @@
     height: 70px;
     display: flex;
     align-items: center;
+
 
 }
 
@@ -145,7 +148,7 @@
     align-items: center;
     display: flex;
     justify-content: center;
-    /* margin-left: 13%; */
+    margin-left: 5%;
 }
 
 .nav-item:hover {

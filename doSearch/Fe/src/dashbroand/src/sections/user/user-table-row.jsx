@@ -10,9 +10,13 @@ import MenuItem from "@mui/material/MenuItem";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 import Label from "../../components/label";
 import Iconify from "../../components/iconify";
+import { toast } from "react-toastify";
 
 // ----------------------------------------------------------------------
 
@@ -25,10 +29,12 @@ export default function UserTableRow({
   sodienthoai,
   isVerified,
   diachi,
+  ghichu,
+  fetchData,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
-
+  const [status, setStatus] = useState(ghichu);
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
@@ -36,14 +42,35 @@ export default function UserTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
+  const handleChange = async (event) => {
+    const newStatus = event.target.value;
+    setStatus(newStatus);
 
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/v1/update-ghichu",
+        {
+          MAKHACHHANG: makhachhang, // Truyền mã khách hàng từ props
+          GHICHU: newStatus, // Trạng thái mới
+        }
+      );
+
+      if (response.data.EC === 1) {
+        fetchData();
+        toast.success(response.data.EM);
+      } else {
+        toast.error(response.data.EM);
+      }
+    } catch (error) {
+      console.error("Error updating GHICHU:", error);
+    }
+  };
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
         <TableCell padding="checkbox">
           {/* <Checkbox disableRipple checked={selected} onChange={handleClick} /> */}
         </TableCell>
-
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar
@@ -51,18 +78,30 @@ export default function UserTableRow({
               src={`http://localhost:3003/images/${avatarUrl}`}
             />
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {name}1
             </Typography>
           </Stack>
         </TableCell>
-
         <TableCell>{diachi}</TableCell>
-
         <TableCell>{makhachhang}</TableCell>
         <TableCell> {sodienthoai}</TableCell>
-
         <TableCell>
           <Label>{taikhoan}</Label>
+        </TableCell>{" "}
+        <TableCell>
+          <FormControl fullWidth>
+            <InputLabel id="status-label">Trạng thái</InputLabel>
+            <Select
+              labelId="status-label"
+              value={ghichu}
+              label="Trạng thái"
+              onChange={handleChange}
+              displayEmpty
+            >
+              <MenuItem value="Đang hoạt động">Đang hoạt động</MenuItem>
+              <MenuItem value="Ngưng hoạt động">Ngưng hoạt động</MenuItem>
+            </Select>
+          </FormControl>
         </TableCell>
       </TableRow>
 

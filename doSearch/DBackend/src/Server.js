@@ -25,37 +25,6 @@ app.use(bodyParser.json());
 // app.use("/helloworld", (req, res) => {
 //   res.send("Hello World");
 // });
-const { spawnSync } = require("child_process");
-
-app.use("/start-python", (req, res) => {
-  console.log("Received request to start Python server...");
-
-  let scriptPath = path.resolve(__dirname, "main.py");
-  console.log("Script Path:", scriptPath);
-
-  const pythonProcess = spawnSync("python", [scriptPath], {
-    encoding: "utf-8",
-    stdio: "pipe",
-  });
-  console.log("pythonProcess", pythonProcess);
-  if (pythonProcess.error) {
-    console.error("Error:", pythonProcess.error);
-    return res.status(500).send("Không thể khởi động server Python");
-  }
-
-  if (pythonProcess.stdout) {
-    console.log("Python script output:", pythonProcess.stdout.toString());
-  }
-  if (pythonProcess.stderr) {
-    console.error(
-      "Python script error output:",
-      pythonProcess.stderr.toString()
-    );
-    return res.status(500).send("Lỗi khi chạy script Python");
-  }
-
-  res.send("Server Python đã được khởi động");
-});
 
 // API của bạn (ví dụ: apiRoute)
 const apiRoute = require("../src/routers/api.js");

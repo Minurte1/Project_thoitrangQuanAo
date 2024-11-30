@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function ForgotPasswordComponent() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(null);
-  const [isOtpSent, setIsOtpSent] = useState(false); // To handle the OTP stage
+  const [isOtpSent, setIsOtpSent] = useState(false);
   const [enteredOtp, setEnteredOtp] = useState(""); // OTP input field
   const [isOtpVerified, setIsOtpVerified] = useState(false); // To switch to password reset form
   const [newPassword, setNewPassword] = useState("");

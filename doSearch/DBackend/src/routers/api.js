@@ -21,6 +21,8 @@ const {
   CapnhatAdmin,
   countUsers,
   getDataUser,
+  updateTrangThaiTaiKhoan,
+  updateTrangThaiTaiKhoan_Login,
 } = require("../controllers/apiUserController");
 const {
   getDonHangChuaduocGiao,
@@ -143,12 +145,12 @@ router.delete("/hang/info/delete", XoaHang);
 router.get("/kichco", DanhSachkichco);
 router.post("/kichco/create", Taokichco);
 router.put("/kichco/info/update/:magiatri", Capnhatkichco);
-router.delete("/kichco/info/delete", XoaKichco); 
+router.delete("/kichco/info/delete", XoaKichco);
 
 //----------------------------------------------------------------------------------------------------------------
 //api MALOAI
-router.get("/loai", DanhSachloai); 
-router.post("/loai/create", Taoloai); 
+router.get("/loai", DanhSachloai);
+router.post("/loai/create", Taoloai);
 router.put("/loai/info/update/:maloai", Capnhatloai);
 router.delete("/loai/info/delete", XoaLoai);
 
@@ -194,4 +196,6 @@ router.put("/user/info/update/password/be/:email", changeFogrgetPassword);
 
 //countSize Product
 router.post("/product-size", getSizeProduct);
+router.post("/update-ghichu", updateTrangThaiTaiKhoan);
+router.post("/update-ghichu-login", updateTrangThaiTaiKhoan_Login);
 module.exports = router; // Di chuyển dòng này về cuối tệp của bạn
